@@ -8,6 +8,7 @@ export function initializeUI(graph, canvas, ctx) {
     "removeRandomSegment",
   );
   const removeRandomPointButton = document.getElementById("removeRandomPoint");
+  const removeAllButton = document.getElementById("removeAll");
 
   addRandomPointButton.addEventListener("click", () =>
     addRandomPoint(graph, canvas, ctx),
@@ -20,6 +21,9 @@ export function initializeUI(graph, canvas, ctx) {
   );
   removeRandomPointButton.addEventListener("click", () =>
     removeRandomPoint(graph, canvas, ctx),
+  );
+  removeAllButton.addEventListener("click", () =>
+    removeAll(graph, canvas, ctx),
   );
 }
 
@@ -78,6 +82,13 @@ function removeRandomPoint(graph, canvas, ctx) {
 
   const index = Math.floor(Math.random() * graph.points.length);
   graph.removePoint(graph.points[index]);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  graph.draw(ctx);
+}
+
+function removeAll(graph, canvas, ctx) {
+  graph.dispose();
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);

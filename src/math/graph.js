@@ -53,6 +53,12 @@ export class Graph {
     return this.segments.filter((seg) => seg.includes(point));
   }
 
+  dispose() {
+    // Setting lengths to zero instead of reassigning [] keeps the same array object, in case it's referenced elsewhere
+    this.segments.length = 0;
+    this.points.length = 0;
+  }
+
   draw(ctx) {
     for (const seg of this.segments) {
       seg.draw(ctx);
