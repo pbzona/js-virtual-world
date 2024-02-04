@@ -1,0 +1,20 @@
+:root {
+  --canvas-scale: 0.9;
+}
+
+body {
+  color: #eee;
+  background-color: #333;
+  text-align: center;
+}
+
+h1 {
+  font-family: sans-serif;
+}
+
+#myCanvas {
+  background-color: #20A979;
+  height: 600px;
+  width: 600px;
+  transform: scale(var(--canvas-scale));
+}
