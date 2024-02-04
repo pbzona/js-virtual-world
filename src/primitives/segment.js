@@ -12,6 +12,19 @@ export class Segment {
     this.p2 = p2;
   }
 
+  /**
+   * Returns a boolean describing whether the current segment is equal to the argument. Points are considered unordered in this operation, i.e. new Segment(p1, p2).equals(new Segment(p2, p1)) = true
+   * @param {Segment} seg Segment to compare against this one
+   * @returns boolean
+   */
+  equals(seg) {
+    return this.includes(seg.p1) && this.includes(seg.p2);
+  }
+
+  includes(point) {
+    return this.p1.equals(point) || this.p2.equals(point);
+  }
+
   draw(ctx, width = 2, color = "#222") {
     ctx.beginPath();
     ctx.lineWidth = width;

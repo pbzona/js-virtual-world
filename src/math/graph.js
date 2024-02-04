@@ -20,6 +20,22 @@ export class Graph {
     return this.points.find((p) => p.equals(point));
   }
 
+  addSegment(seg) {
+    this.segments.push(seg);
+  }
+
+  tryAddSegment(seg) {
+    if (!this.containsSegment(seg)) {
+      this.addSegment(seg);
+      return true;
+    }
+    return false;
+  }
+
+  containsSegment(seg) {
+    return this.segments.find((s) => s.equals(seg));
+  }
+
   draw(ctx) {
     for (const seg of this.segments) {
       seg.draw(ctx);
