@@ -16,6 +16,15 @@ export class Graph {
     return false;
   }
 
+  removePoint(point) {
+    const segs = this.getSegmentsWithPoint(point);
+    for (const seg of segs) {
+      this.removeSegment(seg);
+    }
+
+    this.points.splice(this.points.indexOf(point), 1);
+  }
+
   containsPoint(point) {
     return this.points.find((p) => p.equals(point));
   }
@@ -38,6 +47,10 @@ export class Graph {
 
   containsSegment(seg) {
     return this.segments.find((s) => s.equals(seg));
+  }
+
+  getSegmentsWithPoint(point) {
+    return this.segments.filter((seg) => seg.includes(point));
   }
 
   draw(ctx) {

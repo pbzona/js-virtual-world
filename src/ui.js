@@ -7,6 +7,7 @@ export function initializeUI(graph, canvas, ctx) {
   const removeRandomSegmentButton = document.getElementById(
     "removeRandomSegment",
   );
+  const removeRandomPointButton = document.getElementById("removeRandomPoint");
 
   addRandomPointButton.addEventListener("click", () =>
     addRandomPoint(graph, canvas, ctx),
@@ -16,6 +17,9 @@ export function initializeUI(graph, canvas, ctx) {
   );
   removeRandomSegmentButton.addEventListener("click", () =>
     removeRandomSegment(graph, canvas, ctx),
+  );
+  removeRandomPointButton.addEventListener("click", () =>
+    removeRandomPoint(graph, canvas, ctx),
   );
 }
 
@@ -33,6 +37,11 @@ function addRandomPoint(graph, canvas, ctx, retries = 3) {
 }
 
 function addRandomSegment(graph, canvas, ctx, retries = 5) {
+  if (graph.points.length < 2) {
+    console.error("Not enough points to create a segment");
+    return;
+  }
+
   const index1 = Math.floor(Math.random() * graph.points.length);
   const index2 = Math.floor(Math.random() * graph.points.length);
 
@@ -56,6 +65,19 @@ function removeRandomSegment(graph, canvas, ctx) {
 
   const index = Math.floor(Math.random() * graph.segments.length);
   graph.removeSegment(graph.segments[index]);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  graph.draw(ctx);
+}
+
+function removeRandomPoint(graph, canvas, ctx) {
+  if (graph.points.length === 0) {
+    console.warn("No points in this graph");
+    return;
+  }
+
+  const index = Math.floor(Math.random() * graph.points.length);
+  graph.removePoint(graph.points[index]);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);
