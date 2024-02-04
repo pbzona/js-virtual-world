@@ -9,6 +9,10 @@ export class Point {
     this.y = y;
   }
 
+  equals(point) {
+    return this.x === point.x && this.y === point.y;
+  }
+
   draw(ctx, size = 18, color = "#222") {
     const radius = size / 2;
 

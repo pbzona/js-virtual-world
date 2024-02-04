@@ -9,9 +9,11 @@ export function initializeUI(graph, canvas, ctx) {
 }
 
 function addRandomPoint(graph, canvas, ctx) {
-  graph.addPoint(
+  const success = graph.tryAddPoint(
     new Point(Math.random() * canvas.width, Math.random() * canvas.height),
   );
+
+  console.log(success);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);

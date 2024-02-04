@@ -8,6 +8,18 @@ export class Graph {
     this.points.push(point);
   }
 
+  tryAddPoint(point) {
+    if (!this.containsPoint(point)) {
+      this.addPoint(point);
+      return true;
+    }
+    return false;
+  }
+
+  containsPoint(point) {
+    return this.points.find((p) => p.equals(point));
+  }
+
   draw(ctx) {
     for (const seg of this.segments) {
       seg.draw(ctx);
