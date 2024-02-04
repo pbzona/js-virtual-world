@@ -32,6 +32,10 @@ export class Graph {
     return false;
   }
 
+  removeSegment(seg) {
+    this.segments.splice(this.segments.indexOf(seg), 1);
+  }
+
   containsSegment(seg) {
     return this.segments.find((s) => s.equals(seg));
   }

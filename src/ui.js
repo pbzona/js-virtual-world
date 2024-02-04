@@ -4,12 +4,18 @@ import { Segment } from "./primitives/segment";
 export function initializeUI(graph, canvas, ctx) {
   const addRandomPointButton = document.getElementById("addRandomPoint");
   const addRandomSegmentButton = document.getElementById("addRandomSegment");
+  const removeRandomSegmentButton = document.getElementById(
+    "removeRandomSegment",
+  );
 
   addRandomPointButton.addEventListener("click", () =>
     addRandomPoint(graph, canvas, ctx),
   );
   addRandomSegmentButton.addEventListener("click", () =>
     addRandomSegment(graph, canvas, ctx),
+  );
+  removeRandomSegmentButton.addEventListener("click", () =>
+    removeRandomSegment(graph, canvas, ctx),
   );
 }
 
@@ -21,8 +27,6 @@ function addRandomPoint(graph, canvas, ctx, retries = 3) {
   if (!success && retries > 0) {
     addRandomPoint(graph, canvas, ctx, retries - 1);
   }
-
-  console.log("Add random point:", success);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);
@@ -40,7 +44,18 @@ function addRandomSegment(graph, canvas, ctx, retries = 5) {
     addRandomSegment(graph, canvas, ctx, retries - 1);
   }
 
-  console.log("Add random segment:", success);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  graph.draw(ctx);
+}
+
+function removeRandomSegment(graph, canvas, ctx) {
+  if (graph.segments.length === 0) {
+    console.warn("No segments in this graph");
+    return;
+  }
+
+  const index = Math.floor(Math.random() * graph.segments.length);
+  graph.removeSegment(graph.segments[index]);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   graph.draw(ctx);
