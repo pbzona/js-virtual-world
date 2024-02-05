@@ -20,50 +20,8 @@ export class GraphEditor {
   }
 
   #addEventListeners() {
-    this.canvas.addEventListener("mousedown", (event) => {
-      // Right click
-      if (event.button === 2) {
-        if (this.selected) {
-          this.selected = null;
-        } else if (this.hovered) {
-          this.#removePoint(this.hovered);
-        }
-      }
-
-      // Left click
-      if (event.button === 0) {
-        this.hovered = getNearestPoint(
-          this.mouse,
-          this.graph.points,
-          SELECTION_SENSITIVITY,
-        );
-
-        if (this.hovered) {
-          this.#selectPoint(this.hovered);
-          this.dragging = true;
-          return;
-        }
-
-        this.graph.addPoint(this.mouse);
-
-        this.#selectPoint(this.mouse);
-        this.hovered = this.mouse;
-      }
-    });
-
-    this.canvas.addEventListener("mousemove", (event) => {
-      this.mouse = new Point(event.offsetX, event.offsetY);
-      this.hovered = getNearestPoint(
-        this.mouse,
-        this.graph.points,
-        SELECTION_SENSITIVITY,
-      );
-
-      if (this.dragging && this.selected) {
-        this.selected.x = this.mouse.x;
-        this.selected.y = this.mouse.y;
-      }
-    });
+    this.canvas.addEventListener("mousedown", this.#handleMouseDown.bind(this));
+    this.canvas.addEventListener("mousemove", this.#handleMouseMove.bind(this));
 
     this.canvas.addEventListener("mouseup", () => {
       this.dragging = false;
@@ -72,6 +30,51 @@ export class GraphEditor {
     this.canvas.addEventListener("contextmenu", (event) => {
       event.preventDefault();
     });
+  }
+
+  #handleMouseDown(event) {
+    // Right click
+    if (event.button === 2) {
+      if (this.selected) {
+        this.selected = null;
+      } else if (this.hovered) {
+        this.#removePoint(this.hovered);
+      }
+    }
+
+    // Left click
+    if (event.button === 0) {
+      this.hovered = getNearestPoint(
+        this.mouse,
+        this.graph.points,
+        SELECTION_SENSITIVITY,
+      );
+
+      if (this.hovered) {
+        this.#selectPoint(this.hovered);
+        this.dragging = true;
+        return;
+      }
+
+      this.graph.addPoint(this.mouse);
+
+      this.#selectPoint(this.mouse);
+      this.hovered = this.mouse;
+    }
+  }
+
+  #handleMouseMove(event) {
+    this.mouse = new Point(event.offsetX, event.offsetY);
+    this.hovered = getNearestPoint(
+      this.mouse,
+      this.graph.points,
+      SELECTION_SENSITIVITY,
+    );
+
+    if (this.dragging && this.selected) {
+      this.selected.x = this.mouse.x;
+      this.selected.y = this.mouse.y;
+    }
   }
 
   #selectPoint(point) {
