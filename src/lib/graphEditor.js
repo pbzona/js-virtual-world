@@ -11,6 +11,7 @@ export class GraphEditor {
 
     this.selected = null;
     this.hovered = null;
+    this.dragging = false;
 
     this.#addEventListeners();
   }
@@ -35,6 +36,7 @@ export class GraphEditor {
 
         if (this.hovered) {
           this.selected = this.hovered;
+          this.dragging = true;
           return;
         }
 
@@ -51,6 +53,15 @@ export class GraphEditor {
         this.graph.points,
         SELECTION_SENSITIVITY,
       );
+
+      if (this.dragging && this.selected) {
+        this.selected.x = mouse.x;
+        this.selected.y = mouse.y;
+      }
+    });
+
+    this.canvas.addEventListener("mouseup", () => {
+      this.dragging = false;
     });
 
     this.canvas.addEventListener("contextmenu", (event) => {
