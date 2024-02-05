@@ -13,7 +13,7 @@ export class Point {
     return this.x === point.x && this.y === point.y;
   }
 
-  draw(ctx, { size = 20, color = "#222", outline = false, fill = false } = {}) {
+  draw(ctx, { size = 18, color = "#222", outline = false, fill = false } = {}) {
     const radius = size / 2;
 
     ctx.beginPath();
