@@ -1,4 +1,5 @@
 import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 import { getNearestPoint } from "../math/utils";
 
 const SELECTION_SENSITIVITY = 15;
@@ -22,6 +23,8 @@ export class GraphEditor {
       if (event.button === 2) {
         if (this.hovered) {
           this.#removePoint(this.hovered);
+        } else {
+          this.selected = null;
         }
       }
 
@@ -35,12 +38,20 @@ export class GraphEditor {
         );
 
         if (this.hovered) {
+          if (this.selected) {
+            this.graph.tryAddSegment(new Segment(this.selected, this.hovered));
+          }
           this.selected = this.hovered;
           this.dragging = true;
           return;
         }
 
         this.graph.addPoint(mouse);
+
+        if (this.selected) {
+          this.graph.tryAddSegment(new Segment(this.selected, mouse));
+        }
+
         this.selected = mouse;
         this.hovered = mouse;
       }
