@@ -14,6 +14,8 @@ export class GraphEditor {
     this.hovered = null;
     this.dragging = false;
 
+    this.mouse = null;
+
     this.#addEventListeners();
   }
 
@@ -30,44 +32,36 @@ export class GraphEditor {
 
       // Left click
       if (event.button === 0) {
-        const mouse = new Point(event.offsetX, event.offsetY);
         this.hovered = getNearestPoint(
-          mouse,
+          this.mouse,
           this.graph.points,
           SELECTION_SENSITIVITY,
         );
 
         if (this.hovered) {
-          if (this.selected) {
-            this.graph.tryAddSegment(new Segment(this.selected, this.hovered));
-          }
-          this.selected = this.hovered;
+          this.#selectPoint(this.hovered);
           this.dragging = true;
           return;
         }
 
-        this.graph.addPoint(mouse);
+        this.graph.addPoint(this.mouse);
 
-        if (this.selected) {
-          this.graph.tryAddSegment(new Segment(this.selected, mouse));
-        }
-
-        this.selected = mouse;
-        this.hovered = mouse;
+        this.#selectPoint(this.mouse);
+        this.hovered = this.mouse;
       }
     });
 
     this.canvas.addEventListener("mousemove", (event) => {
-      const mouse = new Point(event.offsetX, event.offsetY);
+      this.mouse = new Point(event.offsetX, event.offsetY);
       this.hovered = getNearestPoint(
-        mouse,
+        this.mouse,
         this.graph.points,
         SELECTION_SENSITIVITY,
       );
 
       if (this.dragging && this.selected) {
-        this.selected.x = mouse.x;
-        this.selected.y = mouse.y;
+        this.selected.x = this.mouse.x;
+        this.selected.y = this.mouse.y;
       }
     });
 
@@ -78,6 +72,14 @@ export class GraphEditor {
     this.canvas.addEventListener("contextmenu", (event) => {
       event.preventDefault();
     });
+  }
+
+  #selectPoint(point) {
+    if (this.selected) {
+      this.graph.tryAddSegment(new Segment(this.selected, point));
+    }
+
+    this.selected = point;
   }
 
   #removePoint(point) {
@@ -95,6 +97,9 @@ export class GraphEditor {
     }
     if (this.selected) {
       this.selected.draw(this.ctx, { outline: true });
+
+      const intent = this.hovered ? this.hovered : this.mouse;
+      new Segment(this.selected, intent).draw(this.ctx, { dash: [3, 3] });
     }
   }
 }
