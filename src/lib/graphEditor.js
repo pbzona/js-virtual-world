@@ -2,16 +2,18 @@ import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
 import { getNearestPoint } from "../math/utils";
 import { Graph } from "../math/graph";
+import { Viewport } from "./viewport";
 
 const SELECTION_SENSITIVITY = 15;
 
 export class GraphEditor {
   /**
-   * @param {HTMLCanvasElement} canvas - Canvas to use for rendering the graph
-   * @param {Graph} graph - Graph to render
+   * @param {Viewport} viewport - Viewport to use for editing the graph
+   * @param {Graph} graph - Graph to edit and render
    */
-  constructor(canvas, graph) {
-    this.canvas = canvas;
+  constructor(viewport, graph) {
+    this.viewport = viewport;
+    this.canvas = viewport.canvas;
     this.graph = graph;
     this.ctx = this.canvas.getContext("2d");
 
@@ -57,7 +59,7 @@ export class GraphEditor {
       this.hovered = getNearestPoint(
         this.mouse,
         this.graph.points,
-        SELECTION_SENSITIVITY,
+        SELECTION_SENSITIVITY * this.viewport.zoom,
       );
 
       if (this.hovered) {
@@ -77,11 +79,11 @@ export class GraphEditor {
    * @param {MouseEvent} event - Movement of the mouse cursor
    */
   #handleMouseMove(event) {
-    this.mouse = new Point(event.offsetX, event.offsetY);
+    this.mouse = this.viewport.getMouse(event);
     this.hovered = getNearestPoint(
       this.mouse,
       this.graph.points,
-      SELECTION_SENSITIVITY,
+      SELECTION_SENSITIVITY * this.viewport.zoom,
     );
 
     if (this.dragging && this.selected) {
