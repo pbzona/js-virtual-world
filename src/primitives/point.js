@@ -23,15 +23,15 @@ export class Point {
 
     if (outline) {
       ctx.beginPath();
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 3;
       ctx.strokeStyle = "yellow";
-      ctx.arc(this.x, this.y, radius * 0.6, 0, Math.PI * 2);
+      ctx.arc(this.x, this.y, radius * 1.05, 0, Math.PI * 2);
       ctx.stroke();
     }
 
     if (fill) {
       ctx.beginPath();
-      ctx.arc(this.x, this.y, radius * 0.4, 0, Math.PI * 2);
+      ctx.arc(this.x, this.y, radius * 0.6, 0, Math.PI * 2);
       ctx.fillStyle = "yellow";
       ctx.fill();
     }
