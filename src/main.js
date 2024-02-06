@@ -28,12 +28,8 @@ const graphEditor = new GraphEditor(viewport, graph);
 animate();
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  ctx.save();
-  ctx.scale(1 / viewport.zoom, 1 / viewport.zoom);
+  viewport.reset();
   graphEditor.display();
-  ctx.restore();
 
   requestAnimationFrame(animate);
 }

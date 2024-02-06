@@ -26,6 +26,42 @@ export function getNearestPoint(
   return nearest;
 }
 
+/**
+ *
+ * @param {Point} p1 First point
+ * @param {Point} p2 Second point
+ * @returns {number} Linear distance between two Points
+ */
 function distance(p1, p2) {
   return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+}
+
+/**
+ *
+ * @param {Point} p1 First point
+ * @param {Point} p2 Second point
+ * @returns {number} Vector sum of two Points
+ */
+export function add(p1, p2) {
+  return new Point(p1.x + p2.x, p1.y + p2.y);
+}
+
+/**
+ *
+ * @param {Point} p1 First point
+ * @param {Point} p2 Second point
+ * @returns {number} Vector difference between two Points
+ */
+export function subtract(p1, p2) {
+  return new Point(p1.x - p2.x, p1.y - p2.y);
+}
+
+/**
+ *
+ * @param {Point} vector Vector
+ * @param {number} scalar Number to scale the vector by
+ * @returns {Point} Vector scaled by a number
+ */
+export function scale(vector, scalar) {
+  return new Point(vector.x * scalar, vector.y * scalar);
 }
