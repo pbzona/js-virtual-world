@@ -15,7 +15,9 @@ export class GraphEditor {
     this.graph = graph;
     this.ctx = this.canvas.getContext("2d");
 
+    /** @type {Point} */
     this.selected = null;
+    /** @type {Point} */
     this.hovered = null;
     this.dragging = false;
 

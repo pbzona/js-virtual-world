@@ -9,10 +9,20 @@ export class Point {
     this.y = y;
   }
 
+  /**
+   * Returns a boolean value representing whether another point's coordinates are equivalent to this object's coordinates
+   * @param {Point} point - Another point object to compare to this one
+   * @returns {boolean}
+   */
   equals(point) {
     return this.x === point.x && this.y === point.y;
   }
 
+  /**
+   *
+   * @param {CanvasRenderingContext2D} ctx - Context with which to render updates
+   * @param {*} param1 Object describing the `size`, `color`, `outline`, and `fill` properties of this point
+   */
   draw(ctx, { size = 18, color = "#222", outline = false, fill = false } = {}) {
     const radius = size / 2;
 

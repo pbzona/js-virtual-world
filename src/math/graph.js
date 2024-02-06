@@ -1,4 +1,12 @@
+import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
+
 export class Graph {
+  /**
+   *
+   * @param {Point[]} points - Points/nodes for the graph
+   * @param {Segment[]} segments - Segments/edges for the graph
+   */
   constructor(points = [], segments = []) {
     this.points = points;
     this.segments = segments;

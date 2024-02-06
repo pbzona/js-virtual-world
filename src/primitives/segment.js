@@ -6,7 +6,6 @@ export class Segment {
    * @param {Point} p1 Starting point for the current segment
    * @param {Point} p2 Ending point for the current segment
    */
-
   constructor(p1, p2) {
     this.p1 = p1;
     this.p2 = p2;
@@ -21,10 +20,18 @@ export class Segment {
     return this.includes(seg.p1) && this.includes(seg.p2);
   }
 
+  /**
+   * @param {Point} point Point to check for inclusion in this
+   * @returns {boolean}
+   */
   includes(point) {
     return this.p1.equals(point) || this.p2.equals(point);
   }
 
+  /**
+   * @param {CanvasRenderingContext2D} ctx Context with which to render the segment
+   * @param {*} param1 Object that describes the segment's `width`, `color`, and `dash` properties
+   */
   draw(ctx, { width = 2, color = "#222", dash = [] } = {}) {
     ctx.beginPath();
     ctx.lineWidth = width;
