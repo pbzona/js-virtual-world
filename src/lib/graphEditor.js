@@ -1,10 +1,15 @@
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
 import { getNearestPoint } from "../math/utils";
+import { Graph } from "../math/graph";
 
 const SELECTION_SENSITIVITY = 15;
 
 export class GraphEditor {
+  /**
+   * @param {HTMLCanvasElement} canvas - Canvas to use for rendering the graph
+   * @param {Graph} graph - Graph to render
+   */
   constructor(canvas, graph) {
     this.canvas = canvas;
     this.graph = graph;
@@ -32,6 +37,9 @@ export class GraphEditor {
     });
   }
 
+  /**
+   * @param {Event} event - Pressing down of a button on the mouse
+   */
   #handleMouseDown(event) {
     // Right click
     if (event.button === 2) {
@@ -63,6 +71,9 @@ export class GraphEditor {
     }
   }
 
+  /**
+   * @param {MouseEvent} event - Movement of the mouse cursor
+   */
   #handleMouseMove(event) {
     this.mouse = new Point(event.offsetX, event.offsetY);
     this.hovered = getNearestPoint(
@@ -77,6 +88,9 @@ export class GraphEditor {
     }
   }
 
+  /**
+   * @param {Point} point - Point object to select, ie set as this.selected
+   */
   #selectPoint(point) {
     if (this.selected) {
       this.graph.tryAddSegment(new Segment(this.selected, point));
@@ -85,6 +99,9 @@ export class GraphEditor {
     this.selected = point;
   }
 
+  /**
+   * @param {Point} point Point to remove from the graph
+   */
   #removePoint(point) {
     this.graph.removePoint(point);
     this.hovered = null;
@@ -93,6 +110,9 @@ export class GraphEditor {
     }
   }
 
+  /**
+   * Draws the graph to the canvas for its current state
+   */
   display() {
     this.graph.draw(this.ctx);
     if (this.hovered) {
