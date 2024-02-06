@@ -102,6 +102,9 @@ export class Viewport {
     if (this.drag.active) {
       this.drag.end = this.getMouse(event);
       this.drag.offset = subtract(this.drag.end, this.drag.start);
+      document.body.style.cursor = "move";
+    } else {
+      document.body.style.cursor = "default";
     }
   }
 
