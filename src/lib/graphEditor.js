@@ -129,4 +129,13 @@ export class GraphEditor {
       new Segment(this.selected, intent).draw(this.ctx, { dash: [3, 3] });
     }
   }
+
+  /**
+   * Dispose of the graph data and reset selected/hovered nodes
+   */
+  dispose() {
+    this.graph.dispose();
+    this.selected = null;
+    this.hovered = null;
+  }
 }

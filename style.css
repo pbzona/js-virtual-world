@@ -18,3 +18,12 @@ h1 {
   width: 600px;
   transform: scale(var(--canvas-scale));
 }
+
+#controls>button {
+  font-size: 20;
+  padding: .5rem;
+}
+
+#controls>button:hover {
+  background-color: dodgerblue;
+}

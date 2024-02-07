@@ -12,6 +12,24 @@ export class Graph {
     this.segments = segments;
   }
 
+  /**
+   * Construct a new Graph from an object representation retrieved from localStorage
+   * @param {*} info An object representing the points and segments in a graph
+   * @returns {Graph}
+   */
+  static load(info) {
+    const points = info.points.map((p) => new Point(p.x, p.y));
+    const segments = info.segments.map(
+      (s) =>
+        new Segment(
+          points.find((p) => p.equals(s.p1)),
+          points.find((p) => p.equals(s.p2)),
+        ),
+    );
+
+    return new Graph(points, segments);
+  }
+
   addPoint(point) {
     this.points.push(point);
   }
