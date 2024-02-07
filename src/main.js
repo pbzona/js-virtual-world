@@ -14,10 +14,16 @@ const savedGraph = window.localStorage.getItem("graph");
 const graphInfo = savedGraph ? JSON.parse(savedGraph) : null;
 const graph = graphInfo ? Graph.load(graphInfo) : new Graph();
 
-const viewport = new Viewport(canvas);
+// Load existing viewport from localstorage if it exists
+const savedViewport = window.localStorage.getItem("viewport");
+const viewportInfo = savedViewport ? JSON.parse(savedViewport) : null;
+const viewport = viewportInfo
+  ? Viewport.load(viewportInfo, canvas)
+  : new Viewport(canvas);
+
 const graphEditor = new GraphEditor(viewport, graph);
 
-document.onload = initializeUI(graphEditor);
+document.onload = initializeUI(graphEditor, viewport);
 animate();
 
 function animate() {

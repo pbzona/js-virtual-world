@@ -7,6 +7,7 @@ const MAX_ZOOM = 5;
 export class Viewport {
   /**
    * @param {HTMLCanvasElement} canvas - The canvas to control with the viewport
+   * @param {*} options - Options to control zoom and offset when loading from storage
    */
   constructor(canvas) {
     this.canvas = canvas;
@@ -24,6 +25,20 @@ export class Viewport {
     };
 
     this.#addEventListeners();
+  }
+
+  /**
+   *
+   * @param {*} info Object to be serialized and used to create the new viewport
+   */
+  static load(info, canvas) {
+    const viewport = new Viewport(canvas);
+
+    const { zoom, offset } = info;
+    viewport.zoom = zoom;
+    viewport.offset = new Point(offset.x, offset.y);
+
+    return viewport;
   }
 
   /**
@@ -60,6 +75,23 @@ export class Viewport {
 
     const offset = this.getOffset();
     this.ctx.translate(offset.x, offset.y);
+  }
+
+  /**
+   * Set everything back to starting values
+   */
+  clear() {
+    this.zoom = 1;
+    this.offset = scale(this.center, -1);
+
+    this.drag = {
+      start: new Point(0, 0),
+      end: new Point(0, 0),
+      offset: new Point(0, 0),
+      active: false,
+    };
+
+    this.reset();
   }
 
   #addEventListeners() {
