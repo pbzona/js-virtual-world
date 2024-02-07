@@ -28,8 +28,8 @@ export class Viewport {
   }
 
   /**
-   *
    * @param {*} info Object to be serialized and used to create the new viewport
+   * @param {HTMLCanvasElement} canvas Canvas used to create the new viewport
    */
   static load(info, canvas) {
     const viewport = new Viewport(canvas);
