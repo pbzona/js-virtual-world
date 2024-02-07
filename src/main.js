@@ -1,6 +1,7 @@
 import { Graph } from "./math/graph";
 import { GraphEditor } from "./lib/graphEditor";
 import { Viewport } from "./lib/viewport";
+import { Envelope } from "./primitives/envelope";
 import { initializeUI } from "./ui/ui";
 
 /**@type {HTMLCanvasElement} */
@@ -22,6 +23,8 @@ animate();
 function animate() {
   viewport.reset();
   graphEditor.display();
+  // new Polygon(graph.points).draw(canvas.getContext("2d"));
+  new Envelope(graph.segments[0], 80).draw(canvas.getContext("2d"));
 
   requestAnimationFrame(animate);
 }

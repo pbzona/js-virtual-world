@@ -65,3 +65,25 @@ export function subtract(p1, p2) {
 export function scale(vector, scalar) {
   return new Point(vector.x * scalar, vector.y * scalar);
 }
+
+/**
+ * @param {number} loc Location of the point to translate from
+ * @param {number} angle Angle from which to translate
+ * @param {number} offset Distance from the point to translate
+ * @returns {Point} Point that is translated from the original input
+ */
+export function translate(loc, angle, offset) {
+  return new Point(
+    loc.x + Math.cos(angle) * offset,
+    loc.y + Math.sin(angle) * offset,
+  );
+}
+
+/**
+ * Returns the angle of the provided 2D vector (Point)
+ * @param {Point} p
+ * @returns {number} Angle of the provided vector/point
+ */
+export function angle(p) {
+  return Math.atan2(p.y, p.x);
+}
