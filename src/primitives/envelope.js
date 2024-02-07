@@ -6,13 +6,20 @@ export class Envelope {
   /**
    * @param {Segment} skeleton Segment/skeleton around which to draw the envelope
    * @param {number} width Width in pixels between the sides of the envelope
+   * @param {number} roundness Smoothness of curve on the end of the skeleton
    */
-  constructor(skeleton, width) {
+  constructor(skeleton, width, roundness = 1) {
     this.skeleton = skeleton;
-    this.poly = this.#generatePolygon(width);
+    this.poly = this.#generatePolygon(width, roundness);
   }
 
-  #generatePolygon(width) {
+  /**
+   *
+   * @param {number} width Distance from the skeleton to generate points
+   * @param {number} roundness Smoothness of the curves on the ends of the skeleton
+   * @returns {Polygon}
+   */
+  #generatePolygon(width, roundness) {
     const { p1, p2 } = this.skeleton;
 
     const radius = width / 2;
@@ -22,13 +29,19 @@ export class Envelope {
     const alpha_cw = alpha + Math.PI / 2;
     const alpha_ccw = alpha - Math.PI / 2;
 
-    // Generate points adjacent by 90deg on either side of the points at a distance of `radius`
-    const p1_ccw = translate(p1, alpha_ccw, radius);
-    const p2_ccw = translate(p2, alpha_ccw, radius);
-    const p2_cw = translate(p2, alpha_cw, radius);
-    const p1_cw = translate(p1, alpha_cw, radius);
+    // Generate rounded ends
+    const points = [];
+    const step = Math.PI / Math.max(1, roundness);
+    const epsilon = step / 2; // Avoids floating point errors where `i` doesn't quite reach alpha_cw
 
-    return new Polygon([p1_ccw, p2_ccw, p2_cw, p1_cw]);
+    for (let i = alpha_ccw; i <= alpha_cw + epsilon; i += step) {
+      points.push(translate(p1, i, radius));
+    }
+    for (let i = alpha_ccw; i <= alpha_cw + epsilon; i += step) {
+      points.push(translate(p2, Math.PI + i, radius));
+    }
+
+    return new Polygon(points);
   }
 
   /**

@@ -23,8 +23,10 @@ animate();
 function animate() {
   viewport.reset();
   graphEditor.display();
-  // new Polygon(graph.points).draw(canvas.getContext("2d"));
-  new Envelope(graph.segments[0], 80).draw(canvas.getContext("2d"));
+
+  for (const seg of graph.segments) {
+    new Envelope(seg, 80, 10).draw(canvas.getContext("2d"));
+  }
 
   requestAnimationFrame(animate);
 }
