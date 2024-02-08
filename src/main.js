@@ -1,7 +1,11 @@
+import { Envelope } from "./primitives/envelope";
+
 import { Graph } from "./math/graph";
+
 import { GraphEditor } from "./lib/graphEditor";
 import { Viewport } from "./lib/viewport";
-import { Envelope } from "./primitives/envelope";
+import { World } from "./lib/world";
+
 import { initializeUI } from "./ui/ui";
 
 /**@type {HTMLCanvasElement} */
@@ -21,18 +25,19 @@ const viewport = viewportInfo
   ? Viewport.load(viewportInfo, canvas)
   : new Viewport(canvas);
 
+const world = new World(graph);
 const graphEditor = new GraphEditor(viewport, graph);
 
 document.onload = initializeUI(graphEditor, viewport);
 animate();
 
 function animate() {
-  viewport.reset();
-  graphEditor.display();
+  const ctx = canvas.getContext("2d");
 
-  for (const seg of graph.segments) {
-    new Envelope(seg, 80, 10).draw(canvas.getContext("2d"));
-  }
+  viewport.reset();
+  world.generate();
+  world.draw(ctx);
+  graphEditor.display();
 
   requestAnimationFrame(animate);
 }
