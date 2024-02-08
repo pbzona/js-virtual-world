@@ -87,3 +87,53 @@ export function translate(loc, angle, offset) {
 export function angle(p) {
   return Math.atan2(p.y, p.x);
 }
+
+// Todo - consolidate functions into the Intersection class
+class Intersection {
+  /**
+   *
+   * @param {number} x X coordinate of the intersecting point
+   * @param {number} y Y coordinate of the intersecting point
+   * @param {number} offset Decimal representing distance along the original line A->B
+   */
+  constructor(x, y, offset) {
+    this.x = x;
+    this.y = y;
+    this.offset = offset;
+  }
+}
+
+/**
+ * Get the point of intersection between two lines, if it exists
+ * @param {Point} A First point on line 1
+ * @param {Point} B Second point on line 1
+ * @param {Point} C First point on line 2
+ * @param {Point} D Second point on line 2
+ * @returns {(Intersection|null)}
+ */
+export function getIntersection(A, B, C, D) {
+  const t = calculateOffsets(A, B, C, D);
+  const u = calculateOffsets(C, D, A, B);
+  if (t && u) {
+    return new Intersection(lerp(A.x, B.x, t), lerp(A.y, B.y, t), t);
+  }
+  return null;
+}
+
+// Calculate the offset of the intersection point, ie distance along A->B expressed as a decimal
+function calculateOffsets(A, B, C, D) {
+  const top = (D.y - C.y) * (A.x - C.x) - (D.x - C.x) * (A.y - C.y);
+  const bottom = (D.x - C.x) * (B.y - A.y) - (D.y - C.y) * (B.x - A.x);
+  if (bottom !== 0.0) {
+    const offset = top / bottom;
+    if (offset >= 0 && offset <= 1) {
+      return offset;
+    }
+  }
+  return null;
+}
+
+// Linear interpolation between two points a & b, at a distance (offset) of t between them
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}

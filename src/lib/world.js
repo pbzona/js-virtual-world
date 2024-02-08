@@ -1,11 +1,20 @@
+import { Graph } from "../math/graph";
 import { Envelope } from "../primitives/envelope";
+import { Polygon } from "../primitives/polygon";
 
 export class World {
+  /**
+   *
+   * @param {Graph} graph Graph to use as the basis for road structures
+   * @param {number} roadWidth Width of road in pixels
+   * @param {number} roadRoundness Number of segments to use when drawing rounded end of envelopes
+   */
   constructor(graph, roadWidth = 100, roadRoundness = 6) {
     this.graph = graph;
     this.roadWidth = roadWidth;
     this.roadRoundness = roadRoundness;
 
+    /** @type {Envelope[]} */
     this.envelopes = [];
 
     this.generate();
@@ -23,6 +32,12 @@ export class World {
         new Envelope(seg, this.roadWidth, this.roadRoundness),
       );
     }
+
+    // Find all intersections between envelopes
+    this.intersections = Polygon.break(
+      this.envelopes[0].poly,
+      this.envelopes[1].poly,
+    );
   }
 
   /**
@@ -33,6 +48,10 @@ export class World {
   draw(ctx) {
     for (const env of this.envelopes) {
       env.draw(ctx);
+    }
+
+    for (const int of this.intersections) {
+      int.draw(ctx, { size: 10, color: "red" });
     }
   }
 }

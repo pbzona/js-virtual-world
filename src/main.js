@@ -1,5 +1,3 @@
-import { Envelope } from "./primitives/envelope";
-
 import { Graph } from "./math/graph";
 
 import { GraphEditor } from "./lib/graphEditor";
