@@ -16,6 +16,8 @@ export class World {
 
     /** @type {Envelope[]} */
     this.envelopes = [];
+    /** @type {Segment[]} */
+    this.roadBorders = [];
 
     this.generate();
   }
@@ -34,10 +36,7 @@ export class World {
     }
 
     // Find all intersections between envelopes
-    this.intersections = Polygon.break(
-      this.envelopes[0].poly,
-      this.envelopes[1].poly,
-    );
+    this.roadBorders = Polygon.union(this.envelopes.map((e) => e.poly));
   }
 
   /**
@@ -50,8 +49,8 @@ export class World {
       env.draw(ctx);
     }
 
-    for (const int of this.intersections) {
-      int.draw(ctx, { size: 10, color: "red" });
+    for (const seg of this.roadBorders) {
+      seg.draw(ctx, { color: "white", width: 4 });
     }
   }
 }

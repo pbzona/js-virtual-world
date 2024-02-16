@@ -14,7 +14,6 @@ export class Envelope {
   }
 
   /**
-   *
    * @param {number} width Distance from the skeleton to generate points
    * @param {number} roundness Smoothness of the curves on the ends of the skeleton
    * @returns {Polygon}
@@ -49,5 +48,6 @@ export class Envelope {
    */
   draw(ctx) {
     this.poly.draw(ctx);
+    this.poly.drawSegments(ctx);
   }
 }
