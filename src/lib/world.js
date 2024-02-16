@@ -46,7 +46,11 @@ export class World {
    */
   draw(ctx) {
     for (const env of this.envelopes) {
-      env.draw(ctx);
+      env.draw(ctx, { fill: "#bbb", stroke: "#bbb", lineWidth: 16 });
+    }
+
+    for (const seg of this.graph.segments) {
+      seg.draw(ctx, { color: "white", width: 4, dash: [10, 10] });
     }
 
     for (const seg of this.roadBorders) {

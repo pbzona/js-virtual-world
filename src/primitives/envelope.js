@@ -45,9 +45,9 @@ export class Envelope {
 
   /**
    * @param {CanvasRenderingContext2D} ctx Context on which to draw
+   * @param {*} options Object containing options to use when drawing the polygon
    */
-  draw(ctx) {
-    this.poly.draw(ctx);
-    this.poly.drawSegments(ctx);
+  draw(ctx, options) {
+    this.poly.draw(ctx, options);
   }
 }
