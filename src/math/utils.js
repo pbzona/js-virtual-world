@@ -74,6 +74,22 @@ export function scale(vector, scalar) {
 }
 
 /**
+ * @param {Point} p Vector for which to return its normalized form
+ * @returns {Point} Vector with same angle as input, but magnitude scaled to 1
+ */
+export function normalize(p) {
+  return scale(p, 1 / magnitude(p));
+}
+
+/**
+ * @param {Point} p Vector for which to measure magnitude
+ * @returns {number} The magnitude of the vector/Point
+ */
+export function magnitude(p) {
+  return Math.hypot(p.x, p.y);
+}
+
+/**
  * @param {number} loc Location of the point to translate from
  * @param {number} angle Angle from which to translate
  * @param {number} offset Distance from the point to translate

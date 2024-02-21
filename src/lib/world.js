@@ -1,6 +1,9 @@
 import { Graph } from "../math/graph";
 import { Envelope } from "../primitives/envelope";
 import { Polygon } from "../primitives/polygon";
+import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
+import { add, scale } from "../math/utils";
 
 export class World {
   /**
@@ -29,6 +32,7 @@ export class World {
     /** @type {Segment[]} */
     this.roadBorders = [];
 
+    /** @type {Segment[]} */
     this.buildings = [];
 
     this.generate();
@@ -63,7 +67,23 @@ export class World {
       }
     }
 
-    return guides;
+    // Divide longer building guides into multiple buildings
+    const supports = [];
+    for (const seg of guides) {
+      const len = seg.length() + this.spacing;
+      const buildingCount = Math.floor(
+        len / (this.buildingMinLength + this.spacing),
+      );
+      const buildingLength = len / buildingCount - this.spacing;
+
+      const dir = seg.directionVector();
+
+      const q1 = seg.p1;
+      const q2 = add(q1, scale(dir, buildingLength));
+      supports.push(new Segment(q1, q2));
+    }
+
+    return supports;
   }
 
   /**

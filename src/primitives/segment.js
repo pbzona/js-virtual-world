@@ -1,5 +1,5 @@
 import { Point } from "./point";
-import { distance } from "../math/utils";
+import { distance, normalize, subtract } from "../math/utils";
 
 export class Segment {
   /**
@@ -17,6 +17,13 @@ export class Segment {
    */
   length() {
     return distance(this.p1, this.p2);
+  }
+
+  /**
+   * @returns {number} Angle of the normalized vector (does not include magnitude)
+   */
+  directionVector() {
+    return normalize(subtract(this.p2, this.p1));
   }
 
   /**
