@@ -1,4 +1,5 @@
 import { Point } from "./point";
+import { distance } from "../math/utils";
 
 export class Segment {
   /**
@@ -9,6 +10,13 @@ export class Segment {
   constructor(p1, p2) {
     this.p1 = p1;
     this.p2 = p2;
+  }
+
+  /**
+   * @returns {number} Linear distance between the ends of the segment
+   */
+  length() {
+    return distance(this.p1, this.p2);
   }
 
   /**

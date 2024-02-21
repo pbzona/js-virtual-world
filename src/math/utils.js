@@ -1,4 +1,4 @@
-import { Point } from '../primitives/point';
+import { Point } from "../primitives/point";
 
 /**
  *
@@ -7,7 +7,11 @@ import { Point } from '../primitives/point';
  * @param {number} threshold Max distance in pixels to consider a given point "near"
  * @returns {Point} The closest point to the given location, and also closer than the given threshold
  */
-export function getNearestPoint(loc, points, threshold = Number.MAX_SAFE_INTEGER) {
+export function getNearestPoint(
+  loc,
+  points,
+  threshold = Number.MAX_SAFE_INTEGER,
+) {
   let minDistance = Number.MAX_SAFE_INTEGER;
   let nearest = null;
 
@@ -27,7 +31,7 @@ export function getNearestPoint(loc, points, threshold = Number.MAX_SAFE_INTEGER
  * @param {Point} p2 Second point
  * @returns {number} Linear distance between two Points
  */
-function distance(p1, p2) {
+export function distance(p1, p2) {
   return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 }
 
@@ -76,7 +80,10 @@ export function scale(vector, scalar) {
  * @returns {Point} Point that is translated from the original input
  */
 export function translate(loc, angle, offset) {
-  return new Point(loc.x + Math.cos(angle) * offset, loc.y + Math.sin(angle) * offset);
+  return new Point(
+    loc.x + Math.cos(angle) * offset,
+    loc.y + Math.sin(angle) * offset,
+  );
 }
 
 /**
