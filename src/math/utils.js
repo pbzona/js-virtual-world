@@ -147,7 +147,9 @@ export function getIntersection(A, B, C, D) {
 function calculateOffsets(A, B, C, D) {
   const top = (D.y - C.y) * (A.x - C.x) - (D.x - C.x) * (A.y - C.y);
   const bottom = (D.x - C.x) * (B.y - A.y) - (D.y - C.y) * (B.x - A.x);
-  if (bottom !== 0.0) {
+
+  const epsilon = 0.0001;
+  if (Math.abs(bottom) > epsilon) {
     const offset = top / bottom;
     if (offset >= 0 && offset <= 1) {
       return offset;
