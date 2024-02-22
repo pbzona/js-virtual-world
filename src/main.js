@@ -27,13 +27,20 @@ const world = new World(graph);
 const graphEditor = new GraphEditor(viewport, graph);
 
 document.onload = initializeUI(graphEditor, viewport);
+
+// Only regenerate graph if it has changed
+let oldGraphHash = graph.hash();
+
 animate();
 
 function animate() {
   const ctx = canvas.getContext("2d");
 
   viewport.reset();
-  world.generate();
+  if (graph.hash() !== oldGraphHash) {
+    world.generate();
+    oldGraphHash = graph.hash();
+  }
   world.draw(ctx);
 
   ctx.globalAlpha = 0.3;

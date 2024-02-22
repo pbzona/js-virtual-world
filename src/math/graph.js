@@ -30,6 +30,13 @@ export class Graph {
     return new Graph(points, segments);
   }
 
+  /**
+   * @returns {string} Stringified object for comparing against changes
+   */
+  hash() {
+    return JSON.stringify(this);
+  }
+
   addPoint(point) {
     this.points.push(point);
   }
