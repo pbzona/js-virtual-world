@@ -45,6 +45,16 @@ export function average(p1, p2) {
 }
 
 /**
+ *
+ * @param {Point} p1 First point/vector
+ * @param {Point} p2 Second point/vector
+ * @returns {number} Dot product of two Points/vectors
+ */
+export function dot(p1, p2) {
+  return p1.x * p2.x + p1.y * p2.y;
+}
+
+/**
  * @param {Point} p1 First point
  * @param {Point} p2 Second point
  * @returns {number} Vector sum of two Points

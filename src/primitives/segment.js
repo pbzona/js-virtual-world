@@ -1,5 +1,13 @@
 import { Point } from "./point";
-import { distance, normalize, subtract } from "../math/utils";
+import {
+  add,
+  distance,
+  dot,
+  magnitude,
+  normalize,
+  scale,
+  subtract,
+} from "../math/utils";
 
 export class Segment {
   /**
@@ -41,6 +49,39 @@ export class Segment {
    */
   includes(point) {
     return this.p1.equals(point) || this.p2.equals(point);
+  }
+
+  /**
+   *
+   * @param {Point} point Point to check against
+   * @returns {number} Scalar minimum distance from the given point to the closest point on the segment
+   */
+  distanceToPoint(point) {
+    const proj = this.projectPoint(point);
+    if (proj.offset > 0 && proj.offset < 1) {
+      return distance(point, proj.point);
+    }
+
+    const distToP1 = distance(point, this.p1);
+    const distToP2 = distance(point, this.p2);
+
+    return Math.min(distToP1, distToP2);
+  }
+
+  /**
+   * @param {Point} point Point to project to
+   * @returns {*} Point along the current segment that aligns perpendicular to the given Point
+   */
+  projectPoint(point) {
+    const a = subtract(point, this.p1);
+    const b = subtract(this.p2, this.p1);
+    const normB = normalize(b);
+    const scalar = dot(a, normB);
+
+    return {
+      point: add(this.p1, scale(normB, scalar)),
+      offset: scalar / magnitude(b),
+    };
   }
 
   /**

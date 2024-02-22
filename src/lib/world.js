@@ -3,7 +3,7 @@ import { Envelope } from "../primitives/envelope";
 import { Polygon } from "../primitives/polygon";
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
-import { add, scale, lerp } from "../math/utils";
+import { add, scale, lerp, distance } from "../math/utils";
 
 export class World {
   /**
@@ -19,6 +19,7 @@ export class World {
     buildingWidth = 150,
     buildingMinLength = 150,
     spacing = 50,
+    treeSize = 140,
   ) {
     this.graph = graph;
     this.roadWidth = roadWidth;
@@ -26,6 +27,7 @@ export class World {
     this.buildingWidth = buildingWidth;
     this.buildingMinLength = buildingMinLength;
     this.spacing = spacing;
+    this.treeSize = treeSize;
 
     /** @type {Envelope[]} */
     this.envelopes = [];
@@ -35,6 +37,7 @@ export class World {
     /** @type {Segment[]} */
     this.buildings = [];
 
+    /**@type {Point[]} */
     this.trees = [];
 
     this.generate();
@@ -140,11 +143,25 @@ export class World {
 
       let keep = true;
       for (const poly of illegalPolys) {
-        if (poly.containsPoint(p)) {
+        if (
+          poly.containsPoint(p) ||
+          poly.distanceToPoint(p) < this.treeSize / 2 // Indirect check for intersection with buildings and roads
+        ) {
           keep = false;
           break;
         }
       }
+
+      // Skip trees that are too close to each other
+      if (keep) {
+        for (const tree of trees) {
+          if (distance(tree, p) < this.treeSize * 1.1) {
+            keep = false;
+            break;
+          }
+        }
+      }
+
       if (keep) {
         trees.push(p);
       }
@@ -190,7 +207,7 @@ export class World {
     }
 
     for (const tree of this.trees) {
-      tree.draw(ctx);
+      tree.draw(ctx, { size: this.treeSize, color: "rgb(0,0,0,0.5" });
     }
 
     for (const building of this.buildings) {

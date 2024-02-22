@@ -89,6 +89,14 @@ export class Polygon {
   }
 
   /**
+   * @param {Point} point Point to check distance
+   * @returns {number} Scalar minimum distance from the nearest segment of the poly to the point
+   */
+  distanceToPoint(point) {
+    return Math.min(...this.segments.map((s) => s.distanceToPoint(point)));
+  }
+
+  /**
    * @param {Polygon} poly Polygon to check for intersections
    * @returns {boolean} Boolean indicator of whether the polygons intersect
    */
