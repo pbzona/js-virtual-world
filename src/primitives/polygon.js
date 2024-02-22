@@ -89,6 +89,21 @@ export class Polygon {
   }
 
   /**
+   * @param {Polygon} poly Polygon to check for intersections
+   * @returns {boolean} Boolean indicator of whether the polygons intersect
+   */
+  intersectsPoly(poly) {
+    for (const s1 of this.segments) {
+      for (const s2 of poly.segments) {
+        if (getIntersection(s1.p1, s1.p2, s2.p1, s2.p2)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
    * Checks if the given segment's *midpoint* is contained within the shape
    * @param {Segment} seg Segment to check for containment
    * @returns {boolean}
