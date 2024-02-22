@@ -159,6 +159,6 @@ function calculateOffsets(A, B, C, D) {
 }
 
 // Linear interpolation between two points a & b, at a distance (offset) of t between them
-function lerp(a, b, t) {
+export function lerp(a, b, t) {
   return a + (b - a) * t;
 }

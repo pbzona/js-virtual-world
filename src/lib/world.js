@@ -3,7 +3,7 @@ import { Envelope } from "../primitives/envelope";
 import { Polygon } from "../primitives/polygon";
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
-import { add, scale } from "../math/utils";
+import { add, scale, lerp } from "../math/utils";
 
 export class World {
   /**
@@ -34,6 +34,8 @@ export class World {
 
     /** @type {Segment[]} */
     this.buildings = [];
+
+    this.trees = [];
 
     this.generate();
   }
@@ -109,6 +111,32 @@ export class World {
   }
 
   /**
+   * @param {number} count Total number of trees to generate
+   * @returns {Point[]} Array of Points representing the location of trees
+   */
+  #generateTrees(count = 10) {
+    const points = [
+      ...this.roadBorders.flatMap((s) => [s.p1, s.p2]),
+      ...this.buildings.flatMap((b) => b.points),
+    ];
+
+    const left = Math.min(...points.map((p) => p.x));
+    const right = Math.max(...points.map((p) => p.x));
+    const top = Math.min(...points.map((p) => p.y));
+    const bottom = Math.max(...points.map((p) => p.y));
+
+    const trees = [];
+    while (trees.length < count) {
+      const p = new Point(
+        lerp(left, right, Math.random()),
+        lerp(bottom, top, Math.random()),
+      );
+      trees.push(p);
+    }
+    return trees;
+  }
+
+  /**
    * Create envelopes for each segment of the graph
    * @returns {void}
    */
@@ -124,6 +152,7 @@ export class World {
     // Find all intersections between envelopes
     this.roadBorders = Polygon.union(this.envelopes.map((e) => e.poly));
     this.buildings = this.#generateBuildings();
+    this.trees = this.#generateTrees();
   }
 
   /**
@@ -142,6 +171,10 @@ export class World {
 
     for (const seg of this.roadBorders) {
       seg.draw(ctx, { color: "white", width: 4 });
+    }
+
+    for (const tree of this.trees) {
+      tree.draw(ctx);
     }
 
     for (const building of this.buildings) {
