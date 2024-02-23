@@ -97,6 +97,15 @@ export class Polygon {
   }
 
   /**
+   * Get the closest distance to the nearest poly. Works based on points only, not segment to segment distance
+   * @param {Polygon} poly Polygon to check distance to
+   * @returns {number} Minimum distance to the input Polygon
+   */
+  distanceToPoly(poly) {
+    return Math.min(...this.points.map((p) => poly.distanceToPoint(p)));
+  }
+
+  /**
    * @param {Polygon} poly Polygon to check for intersections
    * @returns {boolean} Boolean indicator of whether the polygons intersect
    */

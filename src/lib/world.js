@@ -101,9 +101,13 @@ export class World {
       bases.push(new Envelope(seg, this.buildingWidth).poly);
     }
 
+    const epsilon = 0.001; // Fixes floating point number issue
     for (let i = 0; i < bases.length - 1; i++) {
       for (let j = i + 1; j < bases.length; j++) {
-        if (bases[i].intersectsPoly(bases[j])) {
+        if (
+          bases[i].intersectsPoly(bases[j]) ||
+          bases[i].distanceToPoint(bases[j]) < this.spacing - epsilon
+        ) {
           bases.splice(j, 1);
           j--;
         }
