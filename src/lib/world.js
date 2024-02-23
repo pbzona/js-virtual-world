@@ -124,7 +124,7 @@ export class World {
     ];
 
     // How far past the below "area" trees can be generated
-    const addedSpace = 100;
+    const addedSpace = 240;
 
     // The leftmost, rightmost, topmost, and bottommost points of the set of roads & buildings, plus extra space
     const left = Math.min(...points.map((p) => p.x)) - addedSpace;
@@ -139,7 +139,12 @@ export class World {
     ];
 
     const trees = [];
-    while (trees.length < count) {
+
+    // Counts tree generation attempts, up to the max value
+    let tryCount = 0;
+    const maxTries = 30;
+
+    while (tryCount < maxTries) {
       const p = new Point(
         lerp(left, right, Math.random()),
         lerp(bottom, top, Math.random()),
@@ -168,7 +173,10 @@ export class World {
 
       if (keep) {
         trees.push(p);
+        tryCount = 0;
       }
+
+      tryCount++;
     }
     return trees;
   }
@@ -189,7 +197,7 @@ export class World {
     // Find all intersections between envelopes
     this.roadBorders = Polygon.union(this.envelopes.map((e) => e.poly));
     this.buildings = this.#generateBuildings();
-    this.trees = this.#generateTrees();
+    this.trees = this.graph.hasSegments() ? this.#generateTrees() : [];
   }
 
   /**
@@ -210,8 +218,10 @@ export class World {
       seg.draw(ctx, { color: "white", width: 4 });
     }
 
-    for (const tree of this.trees) {
-      tree.draw(ctx, { size: this.treeSize, color: "rgb(0,0,0,0.5" });
+    if (this.graph.hasSegments()) {
+      for (const tree of this.trees) {
+        tree.draw(ctx, { size: this.treeSize, color: "rgb(0,0,0,0.5" });
+      }
     }
 
     for (const building of this.buildings) {

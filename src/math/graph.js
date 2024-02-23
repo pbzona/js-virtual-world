@@ -66,6 +66,15 @@ export class Graph {
     this.segments.push(seg);
   }
 
+  /**
+   * Indicates whether a graph has >0 segments, for checking in operations that
+   * require the graph to be populated
+   * @returns {boolean} Value for whether a graph has segments
+   */
+  hasSegments() {
+    return this.segments.length > 0;
+  }
+
   tryAddSegment(seg) {
     if (!this.containsSegment(seg)) {
       this.addSegment(seg);
