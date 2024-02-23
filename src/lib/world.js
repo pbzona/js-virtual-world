@@ -124,7 +124,7 @@ export class World {
     ];
 
     // How far past the below "area" trees can be generated
-    const addedSpace = 240;
+    const addedSpace = this.treeSize * 2;
 
     // The leftmost, rightmost, topmost, and bottommost points of the set of roads & buildings, plus extra space
     const left = Math.min(...points.map((p) => p.x)) - addedSpace;
@@ -169,6 +169,18 @@ export class World {
             break;
           }
         }
+      }
+
+      // Skip trees that are too far away from roads and buildings
+      if (keep) {
+        let closeToSomething = false;
+        for (const poly of illegalPolys) {
+          if (poly.distanceToPoint(p) < this.treeSize * 2) {
+            closeToSomething = true;
+            break;
+          }
+        }
+        keep = closeToSomething;
       }
 
       if (keep) {
