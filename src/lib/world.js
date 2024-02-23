@@ -222,7 +222,7 @@ export class World {
    * @param {CanvasRenderingContext2D} ctx Context on which to draw
    * @returns {void}
    */
-  draw(ctx) {
+  draw(ctx, viewPoint) {
     for (const env of this.envelopes) {
       env.draw(ctx, { fill: "#bbb", stroke: "#bbb", lineWidth: 16 });
     }
@@ -237,7 +237,7 @@ export class World {
 
     if (this.graph.hasSegments()) {
       for (const tree of this.trees) {
-        tree.draw(ctx);
+        tree.draw(ctx, viewPoint);
       }
     }
 

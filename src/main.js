@@ -5,6 +5,7 @@ import { Viewport } from "./lib/viewport";
 import { World } from "./lib/world";
 
 import { initializeUI } from "./ui/ui";
+import { scale } from "./math/utils";
 
 /**@type {HTMLCanvasElement} */
 const canvas = document.getElementById("myCanvas");
@@ -41,7 +42,9 @@ function animate() {
     world.generate();
     oldGraphHash = graph.hash();
   }
-  world.draw(ctx);
+
+  const viewPoint = scale(viewport.getOffset(), -1);
+  world.draw(ctx, viewPoint);
 
   ctx.globalAlpha = 0.3;
   graphEditor.display();

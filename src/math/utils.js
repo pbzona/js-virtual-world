@@ -172,3 +172,14 @@ function calculateOffsets(A, B, C, D) {
 export function lerp(a, b, t) {
   return a + (b - a) * t;
 }
+
+/**
+ * Returns a linearly interpolated Point in 2D space at an offset between two Points
+ * @param {Point} A First point
+ * @param {Point} B Second point
+ * @param {number} t Offset to interpolate to (from A to B)
+ * @returns {Point} Point representing the interpolated 2D position from A to B
+ */
+export function lerp2D(A, B, t) {
+  return new Point(lerp(A.x, B.x, t), lerp(A.y, B.y, t));
+}
