@@ -123,10 +123,14 @@ export class World {
       ...this.buildings.flatMap((b) => b.points),
     ];
 
-    const left = Math.min(...points.map((p) => p.x));
-    const right = Math.max(...points.map((p) => p.x));
-    const top = Math.min(...points.map((p) => p.y));
-    const bottom = Math.max(...points.map((p) => p.y));
+    // How far past the below "area" trees can be generated
+    const addedSpace = 100;
+
+    // The leftmost, rightmost, topmost, and bottommost points of the set of roads & buildings, plus extra space
+    const left = Math.min(...points.map((p) => p.x)) - addedSpace;
+    const right = Math.max(...points.map((p) => p.x)) + addedSpace;
+    const top = Math.min(...points.map((p) => p.y)) - addedSpace;
+    const bottom = Math.max(...points.map((p) => p.y)) + addedSpace;
 
     // Areas trees should not be placed
     const illegalPolys = [
