@@ -3,6 +3,7 @@ import { Envelope } from "../primitives/envelope";
 import { Polygon } from "../primitives/polygon";
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
+import { Tree } from "../items/tree";
 import { add, scale, lerp, distance } from "../math/utils";
 
 export class World {
@@ -37,7 +38,7 @@ export class World {
     /** @type {Segment[]} */
     this.buildings = [];
 
-    /**@type {Point[]} */
+    /**@type {Tree[]} */
     this.trees = [];
 
     this.generate();
@@ -168,7 +169,7 @@ export class World {
       // Skip trees that are too close to each other
       if (keep) {
         for (const tree of trees) {
-          if (distance(tree, p) < this.treeSize * 1.1) {
+          if (distance(tree.center, p) < this.treeSize * 1.1) {
             keep = false;
             break;
           }
@@ -188,7 +189,7 @@ export class World {
       }
 
       if (keep) {
-        trees.push(p);
+        trees.push(new Tree(p, this.treeSize));
         tryCount = 0;
       }
 
@@ -236,7 +237,7 @@ export class World {
 
     if (this.graph.hasSegments()) {
       for (const tree of this.trees) {
-        tree.draw(ctx, { size: this.treeSize, color: "rgb(0,0,0,0.5" });
+        tree.draw(ctx);
       }
     }
 
