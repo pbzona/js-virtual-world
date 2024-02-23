@@ -11,6 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
-    "parcel": "^2.11.0"
+    "parcel": "^2.11.0",
+    "vercel": "^33.5.1"
   }
 }
