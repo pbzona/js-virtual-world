@@ -1,7 +1,7 @@
 import { Point } from "../primitives/point";
 import { Polygon } from "../primitives/polygon";
 
-import { add, scale, subtract } from "../math/utils";
+import { add, average, scale, subtract } from "../math/utils";
 
 export class Building {
   /**
@@ -9,7 +9,7 @@ export class Building {
    * @param {Polygon} base The shape of the base of the building
    * @param {number} heightCoefficient Scalar used for calculating height
    */
-  constructor(base, heightCoefficient = 0.35) {
+  constructor(base, heightCoefficient = 0.3) {
     this.base = base;
     this.heightCoefficient = heightCoefficient;
   }
@@ -21,7 +21,7 @@ export class Building {
    */
   draw(ctx, viewPoint) {
     const topPoints = this.base.points.map((p) =>
-      add(p, scale(subtract(p, viewPoint), this.heightCoefficient)),
+      add(p, scale(subtract(p, viewPoint), this.heightCoefficient * 0.7)),
     );
     const ceiling = new Polygon(topPoints);
 
@@ -44,13 +44,68 @@ export class Building {
       return b.distanceToPoint(viewPoint) - a.distanceToPoint(viewPoint);
     });
 
+    // Calculate midpoints for drawing the angled roof
+    const baseMidpoints = [
+      average(this.base.points[0], this.base.points[1]),
+      average(this.base.points[2], this.base.points[3]),
+    ];
+
+    const topMidpoints = baseMidpoints.map((p) =>
+      add(p, scale(subtract(p, viewPoint), this.heightCoefficient)),
+    );
+
+    // Create the roof polygons
+    const roofPolys = [
+      new Polygon([
+        ceiling.points[0],
+        ceiling.points[3],
+        topMidpoints[1],
+        topMidpoints[0],
+      ]),
+      new Polygon([
+        ceiling.points[2],
+        ceiling.points[1],
+        topMidpoints[0],
+        topMidpoints[1],
+      ]),
+    ].sort(
+      (a, b) => b.distanceToPoint(viewPoint) - a.distanceToPoint(viewPoint),
+    );
+
+    // Draw polygons that comprise the building
     const buildingColor = "hsl(110 15% 85%)";
     const buildingStroke = "hsl(100 10% 75%)";
 
-    this.base.draw(ctx, { fill: buildingColor, stroke: buildingStroke });
+    const roofColor = "hsl(350 45% 50%)";
+    const roofStroke = "hsl(350 45% 48%)";
+
+    this.base.draw(ctx, {
+      fill: buildingColor,
+      stroke: "rgb(0, 0, 0, 0.10",
+      lineWidth: 24,
+    });
+
     for (const side of sides) {
-      side.draw(ctx, { fill: buildingColor, stroke: buildingStroke });
+      side.draw(ctx, {
+        fill: buildingColor,
+        stroke: buildingStroke,
+        lineWidth: 3,
+      });
     }
-    ceiling.draw(ctx, { fill: buildingColor, stroke: buildingStroke });
+
+    ceiling.draw(ctx, {
+      fill: buildingColor,
+      stroke: buildingColor,
+      lineWidth: 6,
+    });
+
+    for (const poly of roofPolys) {
+      poly.draw(ctx, {
+        fill: roofColor,
+        stroke: roofStroke,
+        lineWidth: 8,
+        join: "round",
+      });
+    }
   }
 }

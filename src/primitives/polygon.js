@@ -168,15 +168,21 @@ export class Polygon {
 
   /**
    * @param {CanvasRenderingContext2D} ctx Context to draw
-   * @param {*} options Object that defines the polygon's `stroke`, `lineWidth`, and `fill`
+   * @param {*} options Object that defines the polygon's `stroke`, `lineWidth`,`fill`, and `join` styles
    */
   draw(
     ctx,
-    { stroke = "blue", lineWidth = 2, fill = "rgba(0,0,255,0.3)" } = {},
+    {
+      stroke = "blue",
+      lineWidth = 2,
+      fill = "rgba(0,0,255,0.3)",
+      join = "miter",
+    } = {},
   ) {
     ctx.beginPath();
     ctx.fillStyle = fill;
     ctx.strokeStyle = stroke;
+    ctx.lineJoin = join;
     ctx.lineWidth = lineWidth;
 
     ctx.moveTo(this.points[0].x, this.points[0].y);
