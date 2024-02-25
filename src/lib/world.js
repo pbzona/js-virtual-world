@@ -237,14 +237,18 @@ export class World {
       seg.draw(ctx, { color: "white", width: 4 });
     }
 
-    if (this.graph.hasSegments()) {
-      for (const tree of this.trees) {
-        tree.draw(ctx, viewPoint);
-      }
-    }
+    const items = [...this.buildings, ...this.trees];
 
-    for (const building of this.buildings) {
-      building.draw(ctx, viewPoint);
+    if (this.graph.hasSegments()) {
+      items.sort((a, b) => {
+        return (
+          b.base.distanceToPoint(viewPoint) - a.base.distanceToPoint(viewPoint)
+        );
+      });
+
+      for (const item of items) {
+        item.draw(ctx, viewPoint);
+      }
     }
   }
 }
