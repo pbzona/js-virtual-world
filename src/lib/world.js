@@ -5,6 +5,7 @@ import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
 import { Tree } from "../items/tree";
 import { add, scale, lerp, distance } from "../math/utils";
+import { Building } from "../items/building";
 
 export class World {
   /**
@@ -35,7 +36,7 @@ export class World {
     /** @type {Segment[]} */
     this.roadBorders = [];
 
-    /** @type {Segment[]} */
+    /** @type {Building[]} */
     this.buildings = [];
 
     /**@type {Tree[]} */
@@ -115,7 +116,7 @@ export class World {
       }
     }
 
-    return bases;
+    return bases.map((b) => new Building(b));
   }
 
   /**
@@ -125,7 +126,7 @@ export class World {
   #generateTrees(count = 10) {
     const points = [
       ...this.roadBorders.flatMap((s) => [s.p1, s.p2]),
-      ...this.buildings.flatMap((b) => b.points),
+      ...this.buildings.flatMap((b) => b.base.points),
     ];
 
     // How far past the below "area" trees can be generated
@@ -139,7 +140,7 @@ export class World {
 
     // Areas trees should not be placed
     const illegalPolys = [
-      ...this.buildings,
+      ...this.buildings.map((b) => b.base),
       ...this.envelopes.map((e) => e.poly),
     ];
 
@@ -220,6 +221,7 @@ export class World {
   /**
    * Draws envelopes that were created by generate()
    * @param {CanvasRenderingContext2D} ctx Context on which to draw
+   * @param {Point} viewPoint Inverse of the camera offset for calculating perspective
    * @returns {void}
    */
   draw(ctx, viewPoint) {
@@ -242,7 +244,7 @@ export class World {
     }
 
     for (const building of this.buildings) {
-      building.draw(ctx);
+      building.draw(ctx, viewPoint);
     }
   }
 }
