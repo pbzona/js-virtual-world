@@ -1,17 +1,17 @@
 import { Point } from "../primitives/point";
 import { Polygon } from "../primitives/polygon";
 
-import { add, average, scale, subtract } from "../math/utils";
+import { add, average, getFake3dPoint, scale, subtract } from "../math/utils";
 
 export class Building {
   /**
    * Creates a new Building
    * @param {Polygon} base The shape of the base of the building
-   * @param {number} heightCoefficient Scalar used for calculating height
+   * @param {number} height Max height in pixels
    */
-  constructor(base, heightCoefficient = 0.3) {
+  constructor(base, height = 200) {
     this.base = base;
-    this.heightCoefficient = heightCoefficient;
+    this.height = height;
   }
 
   /**
@@ -21,7 +21,8 @@ export class Building {
    */
   draw(ctx, viewPoint) {
     const topPoints = this.base.points.map((p) =>
-      add(p, scale(subtract(p, viewPoint), this.heightCoefficient * 0.7)),
+      // add(p, scale(subtract(p, viewPoint), this.heightCoefficient * 0.7)),
+      getFake3dPoint(p, viewPoint, this.height * 0.6),
     );
     const ceiling = new Polygon(topPoints);
 
@@ -51,7 +52,7 @@ export class Building {
     ];
 
     const topMidpoints = baseMidpoints.map((p) =>
-      add(p, scale(subtract(p, viewPoint), this.heightCoefficient)),
+      getFake3dPoint(p, viewPoint, this.height),
     );
 
     // Create the roof polygons

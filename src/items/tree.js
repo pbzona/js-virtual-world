@@ -1,20 +1,19 @@
 import { Point } from "../primitives/point";
 import { Polygon } from "../primitives/polygon";
 
-import { add, lerp, lerp2D, scale, subtract, translate } from "../math/utils";
+import { getFake3dPoint, lerp, lerp2D, translate } from "../math/utils";
 
 export class Tree {
   /**
    * Create a new tree
    * @param {Point} center Center of the tree
    * @param {number} size Size (diameter) of the base of the tree
+   * @param {number} height Max height in pixels
    */
-  constructor(center, size, heightCoefficient = 0.3) {
+  constructor(center, size, height = 160) {
     this.center = center;
     this.size = size;
-
-    // Used for scaling height when rendering tree
-    this.heightCoefficient = heightCoefficient;
+    this.height = height;
 
     this.base = this.#generateLevel(center, size);
   }
@@ -46,10 +45,7 @@ export class Tree {
    * @param {Point} viewPoint Inverse of the viewport offset; distance from the center of the viewport
    */
   draw(ctx, viewPoint) {
-    // Difference between the center and the viewport offset
-    const diff = subtract(this.center, viewPoint);
-    const top = add(this.center, scale(diff, this.heightCoefficient));
-
+    const top = getFake3dPoint(this.center, viewPoint, this.height);
     const levelCount = 7;
 
     for (let level = 0; level < levelCount; level++) {

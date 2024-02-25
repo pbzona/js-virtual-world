@@ -183,3 +183,25 @@ export function lerp(a, b, t) {
 export function lerp2D(A, B, t) {
   return new Point(lerp(A.x, B.x, t), lerp(A.y, B.y, t));
 }
+
+/**
+ * Calculate a "fake 3d point" based on the height it is meant to be above the base point, as well
+ * as the angle it is being viewed at (calculated from viewPoint)
+ * @param {Point} point Base point to calculate from
+ * @param {Point} viewPoint Inverse of distance from camera to input Point
+ * @param {number} height Height in pixels to use when calculating "3d" height
+ * @returns {Point} Point representing the perspective height based on actual height and viewing angle
+ */
+export function getFake3dPoint(point, viewPoint, height) {
+  // Direction of the line between point and viewpoint
+  const dir = normalize(subtract(point, viewPoint));
+
+  // Distance between the viewpoint center for clamping
+  const dist = distance(point, viewPoint);
+
+  // Normalizes on [0,1], tells how much to scale
+  const scalar = Math.atan(dist / 300) / (Math.PI / 2);
+
+  // How much of the height is contributed to the perspective vector
+  return add(point, scale(dir, height * scalar));
+}
