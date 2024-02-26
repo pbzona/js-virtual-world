@@ -27,3 +27,15 @@ h1 {
 #controls>button:hover {
   background-color: dodgerblue;
 }
+
+button {
+  background-color: white;
+  font-size: 28px;
+  padding: 5px 7px 7px 5px;
+  border: none;
+  border-radius: 5px;
+  text-shadow: 1px 1px black;
+  transform: scale(1.2) translateY(20%);
+  margin: 0 0.3rem;
+  cursor: pointer;
+}
