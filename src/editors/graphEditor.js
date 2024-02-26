@@ -2,7 +2,7 @@ import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
 import { getNearestPoint } from "../math/utils";
 import { Graph } from "../math/graph";
-import { Viewport } from "./viewport";
+import { Viewport } from "../lib/viewport";
 
 const SELECTION_SENSITIVITY = 15;
 

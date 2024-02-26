@@ -1,4 +1,5 @@
 import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 
 /**
  *
@@ -20,6 +21,31 @@ export function getNearestPoint(
     if (d < minDistance && d < threshold) {
       minDistance = d;
       nearest = point;
+    }
+  }
+
+  return nearest;
+}
+
+/**
+ * @param {Point} loc Location to compare against a set of segments
+ * @param {Segment[]} segments Set of segments to compare against a location
+ * @param {number} threshold Max distance in pixels to consider a given point "near"
+ * @returns {Point} The closest point to the given location, and also closer than the given threshold
+ */
+export function getNearestSegment(
+  loc,
+  segments,
+  threshold = Number.MAX_SAFE_INTEGER,
+) {
+  let minDistance = Number.MAX_SAFE_INTEGER;
+  let nearest = null;
+
+  for (const seg of segments) {
+    const d = seg.distanceToPoint(loc);
+    if (d < minDistance && d < threshold) {
+      minDistance = d;
+      nearest = seg;
     }
   }
 

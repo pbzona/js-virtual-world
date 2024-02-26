@@ -1,4 +1,4 @@
-import { GraphEditor } from "../lib/graphEditor";
+import { GraphEditor } from "../editors/graphEditor";
 import { Viewport } from "../lib/viewport";
 
 // Get UI buttons
@@ -12,7 +12,7 @@ const stopBtn = document.getElementById("stopBtn");
  * @param {GraphEditor} graphEditor Graph editor whose operation will be affected by the UI
  * @param {Viewport} viewport Viewport that will be affected by the UI
  */
-export const initializeUI = (graphEditor, viewport) => {
+export const initializeUI = (graphEditor, stopEditor, viewport) => {
   // UI Actions
   const disposeGraph = () => {
     graphEditor.dispose();
@@ -38,6 +38,7 @@ export const initializeUI = (graphEditor, viewport) => {
       case "stop":
         stopBtn.style.backgroundColor = "white";
         stopBtn.style.filter = "none";
+        stopEditor.enable();
         break;
     }
   };
@@ -49,6 +50,7 @@ export const initializeUI = (graphEditor, viewport) => {
 
     stopBtn.style.backgroundColor = "gray";
     stopBtn.style.filter = "grayscale(100%)";
+    stopEditor.disable();
   };
 
   // Prepare the buttons

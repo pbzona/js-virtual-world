@@ -1,6 +1,7 @@
 import { Graph } from "./math/graph";
 
-import { GraphEditor } from "./lib/graphEditor";
+import { GraphEditor } from "./editors/graphEditor";
+import { StopEditor } from "./editors/stopEditor";
 import { Viewport } from "./lib/viewport";
 import { World } from "./lib/world";
 
@@ -26,8 +27,9 @@ const viewport = viewportInfo
 
 const world = new World(graph);
 const graphEditor = new GraphEditor(viewport, graph);
+const stopEditor = new StopEditor(viewport, world);
 
-document.onload = initializeUI(graphEditor, viewport);
+document.onload = initializeUI(graphEditor, stopEditor, viewport);
 
 // Only regenerate graph if it has changed
 let oldGraphHash = graph.hash();
@@ -48,6 +50,7 @@ function animate() {
 
   ctx.globalAlpha = 0.3;
   graphEditor.display();
+  stopEditor.display();
 
   requestAnimationFrame(animate);
 }
