@@ -21,6 +21,8 @@ export class StopEditor {
 
     this.mouse = null;
     this.intent = null;
+
+    this.markings = world.markings;
   }
 
   enable() {
@@ -52,7 +54,14 @@ export class StopEditor {
   /**
    * @param {Event} event - Pressing down of a button on the mouse
    */
-  #handleMouseDown(event) {}
+  #handleMouseDown(event) {
+    if (event.button === 0) {
+      if (this.intent) {
+        this.markings.push(this.intent);
+        this.intent = null;
+      }
+    }
+  }
 
   /**
    * @param {MouseEvent} event - Movement of the mouse cursor

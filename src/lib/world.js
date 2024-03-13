@@ -6,6 +6,7 @@ import { Segment } from "../primitives/segment";
 import { Tree } from "../items/tree";
 import { add, scale, lerp, distance } from "../math/utils";
 import { Building } from "../items/building";
+import { Stop } from "../markings/stop";
 
 export class World {
   /**
@@ -44,6 +45,9 @@ export class World {
 
     /**@type {Segment[]} */
     this.laneGuides = [];
+
+    /**@type {Stop[]} */
+    this.markings = [];
 
     this.generate();
   }
@@ -248,6 +252,10 @@ export class World {
   draw(ctx, viewPoint) {
     for (const env of this.envelopes) {
       env.draw(ctx, { fill: "#bbb", stroke: "#bbb", lineWidth: 16 });
+    }
+
+    for (const marking of this.markings) {
+      marking.draw(ctx);
     }
 
     for (const seg of this.graph.segments) {
