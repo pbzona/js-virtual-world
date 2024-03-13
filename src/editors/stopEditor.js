@@ -1,5 +1,6 @@
 import { Viewport } from "../lib/viewport";
 import { World } from "../lib/world";
+import { Stop } from "../markings/stop";
 
 import { getNearestSegment } from "../math/utils";
 
@@ -65,7 +66,19 @@ export class StopEditor {
     );
 
     if (seg) {
-      this.intent = seg;
+      // Add a point at the mouse location along the segment
+      const proj = seg.projectPoint(this.mouse);
+      if (proj.offset >= 0 && proj.offset <= 1) {
+        this.intent = new Stop(
+          proj.point,
+          seg.directionVector(),
+          this.world.roadWidth,
+          this.world.roadWidth / 2,
+          this.ctx,
+        );
+      } else {
+        this.intent = null;
+      }
     } else {
       this.intent = null;
     }
