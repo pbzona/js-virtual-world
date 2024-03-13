@@ -61,7 +61,7 @@ export class StopEditor {
     this.mouse = this.viewport.getMouse(event, true);
     const seg = getNearestSegment(
       this.mouse,
-      this.world.graph.segments,
+      this.world.laneGuides,
       SELECTION_SENSITIVITY * this.viewport.zoom,
     );
 
@@ -72,7 +72,7 @@ export class StopEditor {
         this.intent = new Stop(
           proj.point,
           seg.directionVector(),
-          this.world.roadWidth,
+          this.world.roadWidth / 2,
           this.world.roadWidth / 2,
           this.ctx,
         );

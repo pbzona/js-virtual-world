@@ -42,6 +42,9 @@ export class World {
     /**@type {Tree[]} */
     this.trees = [];
 
+    /**@type {Segment[]} */
+    this.laneGuides = [];
+
     this.generate();
   }
 
@@ -199,6 +202,19 @@ export class World {
     return trees;
   }
 
+  #generateLaneGuides() {
+    const tmpEnvelopes = [];
+    // Create new larger envelopes around the graph (roadways)
+    for (const seg of this.graph.segments) {
+      tmpEnvelopes.push(
+        new Envelope(seg, this.roadWidth / 2, this.roadRoundness),
+      );
+    }
+
+    const segments = Polygon.union(tmpEnvelopes.map((e) => e.poly));
+    return segments;
+  }
+
   /**
    * Create envelopes for each segment of the graph
    * @returns {void}
@@ -216,6 +232,11 @@ export class World {
     this.roadBorders = Polygon.union(this.envelopes.map((e) => e.poly));
     this.buildings = this.#generateBuildings();
     this.trees = this.graph.hasSegments() ? this.#generateTrees() : [];
+
+    if (this.graph.hasSegments()) {
+      this.laneGuides.length = 0;
+      this.laneGuides.push(...this.#generateLaneGuides());
+    }
   }
 
   /**
@@ -249,6 +270,11 @@ export class World {
       for (const item of items) {
         item.draw(ctx, viewPoint);
       }
+
+      // Debug laneGuides
+      // for (const seg of this.laneGuides) {
+      //   seg.draw(ctx, { color: "red" });
+      // }
     }
   }
 }
