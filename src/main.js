@@ -2,6 +2,7 @@ import { Graph } from "./math/graph";
 
 import { GraphEditor } from "./editors/graphEditor";
 import { StopEditor } from "./editors/stopEditor";
+import { CrossingEditor } from "./editors/crossingEditor";
 import { Viewport } from "./lib/viewport";
 import { World } from "./lib/world";
 
@@ -28,8 +29,14 @@ const viewport = viewportInfo
 const world = new World(graph);
 const graphEditor = new GraphEditor(viewport, graph);
 const stopEditor = new StopEditor(viewport, world);
+const crossingEditor = new CrossingEditor(viewport, world);
 
-document.onload = initializeUI(graphEditor, stopEditor, viewport);
+document.onload = initializeUI(
+  graphEditor,
+  stopEditor,
+  crossingEditor,
+  viewport,
+);
 
 // Only regenerate graph if it has changed
 let oldGraphHash = graph.hash();
@@ -51,6 +58,7 @@ function animate() {
   ctx.globalAlpha = 0.3;
   graphEditor.display();
   stopEditor.display();
+  crossingEditor.display();
 
   requestAnimationFrame(animate);
 }

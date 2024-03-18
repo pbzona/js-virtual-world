@@ -138,6 +138,10 @@ export function translate(loc, angle, offset) {
   );
 }
 
+export function perpendicular(p) {
+  return new Point(-p.y, p.x);
+}
+
 /**
  * Returns the angle of the provided 2D vector (Point)
  * @param {Point} p
