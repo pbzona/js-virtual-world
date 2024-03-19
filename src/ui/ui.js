@@ -16,10 +16,13 @@ const saveBtn = document.getElementById("saveBtn");
  * @param {Object} tools.crossing
  * @param {Object} tools.crossing.editor
  * @param {Object} tools.crossing.button
+ * @param {Object} tools.start
+ * @param {Object} tools.start.editor
+ * @param {Object} tools.start.button
  * @param {Viewport} viewport Viewport that will be affected by the UI
  */
 export const initializeUI = (tools, viewport) => {
-  const { graph, stop, crossing } = tools;
+  const { graph, stop, crossing, start } = tools;
 
   // UI Actions
   const disposeGraph = () => {
@@ -57,6 +60,7 @@ export const initializeUI = (tools, viewport) => {
   graph.button.addEventListener("click", () => setMode("graph"));
   stop.button.addEventListener("click", () => setMode("stop"));
   crossing.button.addEventListener("click", () => setMode("crossing"));
+  start.button.addEventListener("click", () => setMode("start"));
 
   // Initial state
   setMode("graph");

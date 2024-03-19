@@ -3,6 +3,7 @@ import { Graph } from "./math/graph";
 import { GraphEditor } from "./editors/graphEditor";
 import { StopEditor } from "./editors/stopEditor";
 import { CrossingEditor } from "./editors/crossingEditor";
+import { StartEditor } from "./editors/startEditor";
 import { Viewport } from "./lib/viewport";
 import { World } from "./lib/world";
 
@@ -31,6 +32,7 @@ const world = new World(graph);
 const graphBtn = document.getElementById("graphBtn");
 const stopBtn = document.getElementById("stopBtn");
 const crossingBtn = document.getElementById("crossingBtn");
+const startBtn = document.getElementById("startBtn");
 
 const tools = {
   graph: { editor: new GraphEditor(viewport, graph), button: graphBtn },
@@ -39,6 +41,7 @@ const tools = {
     editor: new CrossingEditor(viewport, world),
     button: crossingBtn,
   },
+  start: { editor: new StartEditor(viewport, world), button: startBtn },
 };
 
 document.onload = initializeUI(tools, viewport);
