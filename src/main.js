@@ -27,16 +27,21 @@ const viewport = viewportInfo
   : new Viewport(canvas);
 
 const world = new World(graph);
-const graphEditor = new GraphEditor(viewport, graph);
-const stopEditor = new StopEditor(viewport, world);
-const crossingEditor = new CrossingEditor(viewport, world);
 
-document.onload = initializeUI(
-  graphEditor,
-  stopEditor,
-  crossingEditor,
-  viewport,
-);
+const graphBtn = document.getElementById("graphBtn");
+const stopBtn = document.getElementById("stopBtn");
+const crossingBtn = document.getElementById("crossingBtn");
+
+const tools = {
+  graph: { editor: new GraphEditor(viewport, graph), button: graphBtn },
+  stop: { editor: new StopEditor(viewport, world), button: stopBtn },
+  crossing: {
+    editor: new CrossingEditor(viewport, world),
+    button: crossingBtn,
+  },
+};
+
+document.onload = initializeUI(tools, viewport);
 
 // Only regenerate graph if it has changed
 let oldGraphHash = graph.hash();
@@ -56,9 +61,10 @@ function animate() {
   world.draw(ctx, viewPoint);
 
   ctx.globalAlpha = 0.3;
-  graphEditor.display();
-  stopEditor.display();
-  crossingEditor.display();
+
+  for (const tool of Object.values(tools)) {
+    tool.editor.display();
+  }
 
   requestAnimationFrame(animate);
 }

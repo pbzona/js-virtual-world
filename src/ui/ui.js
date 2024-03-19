@@ -1,36 +1,34 @@
-import { GraphEditor } from "../editors/graphEditor";
-import { StopEditor } from "../editors/stopEditor";
-import { CrossingEditor } from "../editors/crossingEditor";
 import { Viewport } from "../lib/viewport";
 
 // Get UI buttons
 const disposeBtn = document.getElementById("disposeBtn");
 const saveBtn = document.getElementById("saveBtn");
-const graphBtn = document.getElementById("graphBtn");
-const stopBtn = document.getElementById("stopBtn");
-const crossingBtn = document.getElementById("crossingBtn");
 
 /**
  *
- * @param {GraphEditor} graphEditor Graph editor whose operation will be affected by the UI
- * @param {StopEditor} stopEditor Stop editor whose operation will be affected by the UI
- * @param {CrossingEditor} crossingEditor Crossing editor whose operation will be affected by the UI
+ * @param {Object} tools Object containing various UI tools
+ * @param {Object} tools.graph
+ * @param {Object} tools.graph.editor
+ * @param {Object} tools.graph.button
+ * @param {Object} tools.stop
+ * @param {Object} tools.stop.editor
+ * @param {Object} tools.stop.button
+ * @param {Object} tools.crossing
+ * @param {Object} tools.crossing.editor
+ * @param {Object} tools.crossing.button
  * @param {Viewport} viewport Viewport that will be affected by the UI
  */
-export const initializeUI = (
-  graphEditor,
-  stopEditor,
-  crossingEditor,
-  viewport,
-) => {
+export const initializeUI = (tools, viewport) => {
+  const { graph, stop, crossing } = tools;
+
   // UI Actions
   const disposeGraph = () => {
-    graphEditor.dispose();
+    graph.editor.dispose();
     viewport.clear();
   };
 
   const saveGraph = () => {
-    window.localStorage.setItem("graph", JSON.stringify(graphEditor.graph));
+    window.localStorage.setItem("graph", JSON.stringify(graph.editor.graph));
 
     const { zoom, offset } = viewport;
     window.localStorage.setItem("viewport", JSON.stringify({ zoom, offset }));
@@ -38,50 +36,27 @@ export const initializeUI = (
 
   const setMode = (mode) => {
     disableEditors();
-
-    switch (mode) {
-      case "graph":
-        graphBtn.style.backgroundColor = "white";
-        graphBtn.style.filter = "";
-        graphEditor.enable();
-        break;
-      case "stop":
-        stopBtn.style.backgroundColor = "white";
-        stopBtn.style.filter = "none";
-        stopEditor.enable();
-        break;
-      case "crossing":
-        crossingBtn.style.backgroundColor = "white";
-        crossingBtn.style.filter = "none";
-        crossingEditor.enable();
-        break;
-    }
+    tools[mode].button.style.backgroundColor = "white";
+    tools[mode].button.style.filter = "";
+    tools[mode].editor.enable();
   };
 
   const disableEditors = () => {
-    graphBtn.style.backgroundColor = "gray";
-    graphBtn.style.filter = "grayscale(100%)";
-    graphEditor.disable();
-
-    stopBtn.style.backgroundColor = "gray";
-    stopBtn.style.filter = "grayscale(100%)";
-    stopEditor.disable();
-
-    crossingBtn.style.backgroundColor = "gray";
-    crossingBtn.style.filter = "grayscale(100%)";
-    crossingEditor.disable();
+    for (const tool of Object.values(tools)) {
+      tool.button.style.backgroundColor = "gray";
+      tool.button.style.filter = "grayscale(100%)";
+      tool.editor.disable();
+    }
   };
 
   // Prepare the buttons
   disposeBtn.addEventListener("click", () =>
-    disposeGraph(graphEditor, viewport),
+    disposeGraph(graph.editor, viewport),
   );
-  saveBtn.addEventListener("click", () =>
-    saveGraph(graphEditor.graph, viewport),
-  );
-  graphBtn.addEventListener("click", () => setMode("graph"));
-  stopBtn.addEventListener("click", () => setMode("stop"));
-  crossingBtn.addEventListener("click", () => setMode("crossing"));
+  saveBtn.addEventListener("click", () => saveGraph(graph, viewport));
+  graph.button.addEventListener("click", () => setMode("graph"));
+  stop.button.addEventListener("click", () => setMode("stop"));
+  crossing.button.addEventListener("click", () => setMode("crossing"));
 
   // Initial state
   setMode("graph");
