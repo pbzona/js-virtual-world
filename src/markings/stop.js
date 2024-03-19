@@ -1,10 +1,9 @@
 import { Point } from "../primitives/point";
-import { Segment } from "../primitives/segment";
-import { Envelope } from "../primitives/envelope";
+import { Marking } from "./marking";
 
-import { translate, angle } from "../math/utils";
+import { angle } from "../math/utils";
 
-export class Stop {
+export class Stop extends Marking {
   /**
    * Stop marking to be placed on a road segment
    * @param {Point} center Center point of the marking
@@ -12,18 +11,8 @@ export class Stop {
    * @param {number} width Width of the marking polygon
    * @param {number} height Height of the marking polygon
    */
-  constructor(center, directionVector, width, height, ctx) {
-    this.center = center;
-    this.directionVector = directionVector;
-    this.width = width;
-    this.height = height;
-
-    this.support = new Segment(
-      translate(center, angle(directionVector), height / 2),
-      translate(center, angle(directionVector), -height / 2),
-    );
-
-    this.poly = new Envelope(this.support, width, 0).poly;
+  constructor(center, directionVector, width, height) {
+    super(center, directionVector, width, height);
 
     this.border = this.poly.segments[2];
   }

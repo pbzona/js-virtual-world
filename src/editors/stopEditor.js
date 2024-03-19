@@ -19,7 +19,6 @@ export class StopEditor extends MarkingEditor {
       directionVector,
       this.world.roadWidth / 2,
       this.world.roadWidth / 2,
-      this.ctx,
     );
   }
 }

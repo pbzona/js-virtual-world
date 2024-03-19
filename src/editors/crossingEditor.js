@@ -19,7 +19,6 @@ export class CrossingEditor extends MarkingEditor {
       directionVector,
       this.world.roadWidth,
       this.world.roadWidth / 2,
-      this.ctx,
     );
   }
 }

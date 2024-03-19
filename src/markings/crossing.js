@@ -1,10 +1,10 @@
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
-import { Envelope } from "../primitives/envelope";
+import { Marking } from "./marking";
 
-import { add, translate, angle, perpendicular, scale } from "../math/utils";
+import { add, perpendicular, scale } from "../math/utils";
 
-export class Crossing {
+export class Crossing extends Marking {
   /**
    * Crossing marking to be placed on a road segment
    * @param {Point} center Center point of the marking
@@ -12,18 +12,8 @@ export class Crossing {
    * @param {number} width Width of the marking polygon
    * @param {number} height Height of the marking polygon
    */
-  constructor(center, directionVector, width, height, ctx) {
-    this.center = center;
-    this.directionVector = directionVector;
-    this.width = width;
-    this.height = height;
-
-    this.support = new Segment(
-      translate(center, angle(directionVector), height / 2),
-      translate(center, angle(directionVector), -height / 2),
-    );
-
-    this.poly = new Envelope(this.support, width, 0).poly;
+  constructor(center, directionVector, width, height) {
+    super(center, directionVector, width, height);
 
     this.borders = [this.poly.segments[0], this.poly.segments[2]];
   }
