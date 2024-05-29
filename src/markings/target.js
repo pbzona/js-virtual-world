@@ -1,8 +1,6 @@
 import { Point } from "../primitives/point";
 import { Marking } from "./marking";
 
-import { angle } from "../math/utils";
-
 export class Target extends Marking {
   /**
    * Target marking to be placed on a road segment
