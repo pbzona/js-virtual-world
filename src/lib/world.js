@@ -6,7 +6,7 @@ import { Segment } from "../primitives/segment";
 import { Tree } from "../items/tree";
 import { add, scale, lerp, distance } from "../math/utils";
 import { Building } from "../items/building";
-import { Stop } from "../markings/stop";
+import { Marking } from "../markings/marking";
 
 export class World {
   /**
@@ -46,7 +46,7 @@ export class World {
     /**@type {Segment[]} */
     this.laneGuides = [];
 
-    /**@type {Stop[]} */
+    /**@type {Marking[]} */
     this.markings = [];
 
     this.generate();
