@@ -1,7 +1,7 @@
 import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 import { Marking } from "./marking";
-
-import { angle } from "../math/utils";
+import { add, lerp2D, perpendicular, scale } from "../math/utils";
 
 export class Light extends Marking {
   /**
@@ -13,8 +13,6 @@ export class Light extends Marking {
    */
   constructor(center, directionVector, width, height) {
     super(center, directionVector, width, height);
-
-    this.border = this.poly.segments[2];
   }
 
   /**
@@ -22,19 +20,23 @@ export class Light extends Marking {
    * @param {CanvasRenderingContext2D} ctx Context on which to draw
    */
   draw(ctx) {
-    this.border.draw(ctx, { width: 5, color: "white" });
+    const perp = perpendicular(this.directionVector);
+    const line = new Segment(
+      add(this.center, scale(perp, this.width / 2)),
+      add(this.center, scale(perp, -this.width / 2)),
+    );
 
-    ctx.save();
-    ctx.translate(this.center.x, this.center.y);
-    ctx.rotate(angle(this.directionVector) - Math.PI / 2);
-    ctx.scale(1, 2);
+    const green = lerp2D(line.p1, line.p2, 0.25);
+    const yellow = lerp2D(line.p1, line.p2, 0.5);
+    const red = lerp2D(line.p1, line.p2, 0.75);
 
-    ctx.beginPath();
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "white";
-    ctx.font = `bold ${this.height * 0.3}px Arial`;
-    ctx.fillText("LITE", 0, 0);
-    ctx.restore();
+    new Segment(red, green).draw(ctx, {
+      width: 18,
+      cap: "round",
+    });
+
+    green.draw(ctx, { color: "#2d4", size: this.height * 0.16 });
+    yellow.draw(ctx, { color: "#fd2", size: this.height * 0.16 });
+    red.draw(ctx, { color: "#e44", size: this.height * 0.16 });
   }
 }
