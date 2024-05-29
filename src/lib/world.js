@@ -4,9 +4,10 @@ import { Polygon } from "../primitives/polygon";
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
 import { Tree } from "../items/tree";
-import { add, scale, lerp, distance } from "../math/utils";
+import { add, scale, lerp, distance, getNearestPoint } from "../math/utils";
 import { Building } from "../items/building";
 import { Marking } from "../markings/marking";
+import { Light } from "../markings/light";
 
 export class World {
   /**
@@ -48,6 +49,8 @@ export class World {
 
     /**@type {Marking[]} */
     this.markings = [];
+
+    this.frameCount = 0;
 
     this.generate();
   }
@@ -244,12 +247,69 @@ export class World {
   }
 
   /**
+   * Recalculate the state of traffic lights
+   * @returns {void}
+   */
+  #updateLights() {
+    const lights = this.markings.filter((m) => m instanceof Light);
+    const controlCenters = [];
+
+    // Find the closest graph point for each light
+    for (const light of lights) {
+      const p = getNearestPoint(light.center, this.graph.points);
+      let controlCenter = controlCenters.find((c) => c.equals(p));
+
+      if (!controlCenter) {
+        controlCenter = new Point(p.x, p.y);
+        controlCenter.lights = [light];
+        controlCenters.push(controlCenter);
+      } else {
+        controlCenter.lights.push(light);
+      }
+    }
+
+    // Time to display each light color
+    const duration = {
+      green: 3,
+      yellow: 2,
+    };
+
+    for (const center of controlCenters) {
+      center.ticks = center.lights.length * (duration.green + duration.yellow);
+    }
+
+    const tick = Math.floor(this.frameCount / 60);
+    for (const center of controlCenters) {
+      const cTick = tick % center.ticks;
+      const greenYellowIndex = Math.floor(
+        cTick / (duration.green + duration.yellow),
+      );
+      const greenYellowState =
+        cTick % (duration.green + duration.yellow) < duration.green
+          ? "green"
+          : "yellow";
+
+      for (let i = 0; i < center.lights.length; i++) {
+        if (i === greenYellowIndex) {
+          center.lights[i].state = greenYellowState;
+        } else {
+          center.lights[i].state = "red";
+        }
+      }
+    }
+
+    this.frameCount++;
+  }
+
+  /**
    * Draws envelopes that were created by generate()
    * @param {CanvasRenderingContext2D} ctx Context on which to draw
    * @param {Point} viewPoint Inverse of the camera offset for calculating perspective
    * @returns {void}
    */
   draw(ctx, viewPoint) {
+    this.#updateLights();
+
     for (const env of this.envelopes) {
       env.draw(ctx, { fill: "#bbb", stroke: "#bbb", lineWidth: 16 });
     }
