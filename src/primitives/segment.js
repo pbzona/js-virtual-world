@@ -86,12 +86,17 @@ export class Segment {
 
   /**
    * @param {CanvasRenderingContext2D} ctx Context with which to render the segment
-   * @param {*} param1 Object that describes the segment's `width`, `color`, and `dash` properties
+   * @param {*} config Object that describes the segment's properties
+   * @param {number} config.width How wide the segment should be drawn
+   * @param {string} config.color Color of the segment
+   * @param {number[]} config.dash Array of values to use in the segment's lineDash
+   * @param {"butt"|"rounded"|"square"} config.cap Style to use for the segment's lineCap
    */
-  draw(ctx, { width = 2, color = "#222", dash = [] } = {}) {
+  draw(ctx, { width = 2, color = "#222", dash = [], cap = "butt" } = {}) {
     ctx.beginPath();
     ctx.lineWidth = width;
     ctx.strokeStyle = color;
+    ctx.lineCap = cap;
     ctx.setLineDash(dash);
     ctx.moveTo(this.p1.x, this.p1.y);
     ctx.lineTo(this.p2.x, this.p2.y);
