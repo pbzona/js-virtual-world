@@ -4,6 +4,10 @@ import { GraphEditor } from "./editors/graphEditor";
 import { StopEditor } from "./editors/stopEditor";
 import { CrossingEditor } from "./editors/crossingEditor";
 import { StartEditor } from "./editors/startEditor";
+import { TargetEditor } from "./editors/targetEditor";
+import { ParkingEditor } from "./editors/parkingEditor";
+import { LightEditor } from "./editors/lightEditor";
+import { YieldEditor } from "./editors/yieldEditor";
 import { Viewport } from "./lib/viewport";
 import { World } from "./lib/world";
 
@@ -33,6 +37,10 @@ const graphBtn = document.getElementById("graphBtn");
 const stopBtn = document.getElementById("stopBtn");
 const crossingBtn = document.getElementById("crossingBtn");
 const startBtn = document.getElementById("startBtn");
+const parkingBtn = document.getElementById("parkingBtn");
+const lightBtn = document.getElementById("lightBtn");
+const targetBtn = document.getElementById("targetBtn");
+const yieldBtn = document.getElementById("yieldBtn");
 
 const tools = {
   graph: { editor: new GraphEditor(viewport, graph), button: graphBtn },
@@ -42,6 +50,10 @@ const tools = {
     button: crossingBtn,
   },
   start: { editor: new StartEditor(viewport, world), button: startBtn },
+  target: { editor: new TargetEditor(viewport, world), button: targetBtn },
+  parking: { editor: new ParkingEditor(viewport, world), button: parkingBtn },
+  light: { editor: new LightEditor(viewport, world), button: lightBtn },
+  yield: { editor: new YieldEditor(viewport, world), button: yieldBtn },
 };
 
 document.onload = initializeUI(tools, viewport);

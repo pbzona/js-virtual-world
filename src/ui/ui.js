@@ -19,10 +19,31 @@ const saveBtn = document.getElementById("saveBtn");
  * @param {Object} tools.start
  * @param {Object} tools.start.editor
  * @param {Object} tools.start.button
+ * @param {Object} tools.parking
+ * @param {Object} tools.parking.editor
+ * @param {Object} tools.parking.button
+ * @param {Object} tools.light
+ * @param {Object} tools.light.editor
+ * @param {Object} tools.light.button
+ * @param {Object} tools.target
+ * @param {Object} tools.target.editor
+ * @param {Object} tools.target.button
+ * @param {Object} tools.yield
+ * @param {Object} tools.yield.editor
+ * @param {Object} tools.yield.button
  * @param {Viewport} viewport Viewport that will be affected by the UI
  */
 export const initializeUI = (tools, viewport) => {
-  const { graph, stop, crossing, start } = tools;
+  const {
+    graph,
+    stop,
+    crossing,
+    start,
+    parking,
+    light,
+    target,
+    yield: yieldSign,
+  } = tools;
 
   // UI Actions
   const disposeGraph = () => {
@@ -61,6 +82,10 @@ export const initializeUI = (tools, viewport) => {
   stop.button.addEventListener("click", () => setMode("stop"));
   crossing.button.addEventListener("click", () => setMode("crossing"));
   start.button.addEventListener("click", () => setMode("start"));
+  parking.button.addEventListener("click", () => setMode("parking"));
+  target.button.addEventListener("click", () => setMode("target"));
+  yieldSign.button.addEventListener("click", () => setMode("yield"));
+  light.button.addEventListener("click", () => setMode("light"));
 
   // Initial state
   setMode("graph");
