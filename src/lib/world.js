@@ -247,6 +247,33 @@ export class World {
   }
 
   /**
+   * Returns all points in the graph with a degree > 2
+   * @returns {Point[]}
+   */
+  #getIntersections() {
+    const subset = [];
+
+    for (const point of this.graph.points) {
+      let degree = 0;
+      for (const seg of this.graph.segments) {
+        if (seg.includes(point)) {
+          degree++;
+        }
+      }
+
+      if (degree > 2) {
+        subset.push(point);
+      }
+    }
+
+    if (subset.length > 0) {
+      return subset;
+    }
+    // If there are no intersections just return the graph points
+    return this.graph.points;
+  }
+
+  /**
    * Recalculate the state of traffic lights
    * @returns {void}
    */
@@ -256,7 +283,7 @@ export class World {
 
     // Find the closest graph point for each light
     for (const light of lights) {
-      const p = getNearestPoint(light.center, this.graph.points);
+      const p = getNearestPoint(light.center, this.#getIntersections());
       let controlCenter = controlCenters.find((c) => c.equals(p));
 
       if (!controlCenter) {
