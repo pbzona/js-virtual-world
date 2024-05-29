@@ -13,6 +13,9 @@ export class Light extends Marking {
    */
   constructor(center, directionVector, width, height) {
     super(center, directionVector, width, height);
+
+    this.state = "green";
+    this.border = this.poly.segments[0];
   }
 
   /**
@@ -35,8 +38,22 @@ export class Light extends Marking {
       cap: "round",
     });
 
-    green.draw(ctx, { color: "#2d4", size: this.height * 0.16 });
-    yellow.draw(ctx, { color: "#fd2", size: this.height * 0.16 });
-    red.draw(ctx, { color: "#e44", size: this.height * 0.16 });
+    green.draw(ctx, { color: "#060", size: this.height * 0.16 });
+    yellow.draw(ctx, { color: "#770", size: this.height * 0.16 });
+    red.draw(ctx, { color: "#600", size: this.height * 0.16 });
+
+    switch (this.state) {
+      case "green":
+        green.draw(ctx, { color: "#2d4", size: this.height * 0.16 });
+        break;
+      case "yellow":
+        yellow.draw(ctx, { color: "#fd0", size: this.height * 0.16 });
+        break;
+      case "red":
+        red.draw(ctx, { color: "#f33", size: this.height * 0.16 });
+        break;
+      default:
+        break;
+    }
   }
 }
