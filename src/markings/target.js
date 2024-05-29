@@ -11,29 +11,17 @@ export class Target extends Marking {
    * @param {number} width Width of the marking polygon
    * @param {number} height Height of the marking polygon
    */
+
   constructor(center, directionVector, width, height) {
     super(center, directionVector, width, height);
-
-    this.border = this.poly.segments[2];
   }
 
   /**
    * @param {CanvasRenderingContext2D} ctx Context on which to draw
    */
   draw(ctx) {
-    this.border.draw(ctx, { width: 5, color: "white" });
-
-    ctx.save();
-    ctx.translate(this.center.x, this.center.y);
-    ctx.rotate(angle(this.directionVector) - Math.PI / 2);
-    ctx.scale(1, 2);
-
-    ctx.beginPath();
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "white";
-    ctx.font = `bold ${this.height * 0.3}px Arial`;
-    ctx.fillText("TRGT", 0, 0);
-    ctx.restore();
+    this.center.draw(ctx, { color: "red", size: 30 });
+    this.center.draw(ctx, { color: "white", size: 20 });
+    this.center.draw(ctx, { color: "red", size: 10 });
   }
 }
